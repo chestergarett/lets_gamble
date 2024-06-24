@@ -141,7 +141,23 @@ def concatenate_dfs(folder_path):
     combined_df = pd.concat(dfs, ignore_index=True)
     combined_df.to_csv(f'{folder_path}/all_years.csv', index=False)
 
-# years = [2018]
+def get_country_head_to_head(csv):
+    df = pd.read_csv(csv)
+    grouped_df = df.groupby(['Year','winner_country', 'loser_country']).size().reset_index()
+    grouped_df.to_csv(r'files/mlbb/MSC/aggregates/country_matchup.csv')
+
+### scrape per year MSC results
+# years = [2023,2022,2021, 2019, 2018]
 # loop_per_year_then_scrape(years)
-folder_path = r'files/mlbb/MSC'
-concatenate_dfs(folder_path)
+
+#### contenate per year stats into one dataframe
+# folder_path = r'files/mlbb/MSC/'
+# concatenate_dfs(folder_path)
+
+### country head to head matchups
+concatenated_csv = r'files/mlbb/MSC/all_years.csv'
+get_country_head_to_head(concatenated_csv)
+
+# create xgboost model to predict who will win match based on stats
+# create pytorch ANN model to predict who will win match based on stats
+# compare results
