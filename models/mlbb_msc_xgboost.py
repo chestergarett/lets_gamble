@@ -65,7 +65,6 @@ def get_sample_data(df):
     return sample
 
 def predict(trained_model,label_encoder,scaler,explainer, df):
-    print(df.columns)
     df['year'] = label_encoder.fit_transform(df['year'])
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
     df[numeric_cols] = scaler.transform(df[numeric_cols])
@@ -75,13 +74,13 @@ def predict(trained_model,label_encoder,scaler,explainer, df):
 
     results = []
     for i in range(len(predictions)):
+        explanation = dict(zip(df.columns, shap_values[i].values))
+        top_3_explanation = dict(sorted(explanation.items(), key=lambda item: abs(item[1]), reverse=True)[:3])
         prediction_result = {
             'prediction': int(predictions[i]),
-            'explanation': dict(zip(df.columns, shap_values[i].values))
+            'explanation': top_3_explanation
         }
         results.append(prediction_result)
-    
-    print(results)
     
     return results
 
@@ -89,23 +88,37 @@ def get_sample_data(df):
     sample = df.sample()
     return sample
 
-### training the model
-# file_folder = r'files/mlbb/MSC/model_usage'
-# X_train = pd.read_csv(f'{file_folder}/X_train.csv')
-# X_test = pd.read_csv(f'{file_folder}/X_test.csv')
-# y_train = pd.read_csv(f'{file_folder}/y_train.csv')
-# y_test = pd.read_csv(f'{file_folder}/y_test.csv')
-# X_train, X_test, y_train, y_test,X_column_orders =  convert_df_to_arrays(X_train, X_test, y_train, y_test)
-# train_model(X_train,X_test, y_train, y_test)
+def run_training_pipeline(training_file_folder):
+    X_train = pd.read_csv(f'{training_file_folder}/X_train.csv')
+    X_test = pd.read_csv(f'{training_file_folder}/X_test.csv')
+    y_train = pd.read_csv(f'{training_file_folder}/y_train.csv')
+    y_test = pd.read_csv(f'{training_file_folder}/y_test.csv')
+    X_train, X_test, y_train, y_test,X_column_orders =  convert_df_to_arrays(X_train, X_test, y_train, y_test)
+    train_model(X_train,X_test, y_train, y_test)
 
 ### getting samples to test for inference
-file_folder = r'files/mlbb/MSC/model_usage'
-X_test = pd.read_csv(f'{file_folder}/X_test.csv')
-sample_df = get_sample_data(X_test)
+def run_sampling_for_inference(inference_file_folder):
+    X_test = pd.read_csv(f'{inference_file_folder}/X_test.csv')
+    sample_df = get_sample_data(X_test)
+    return sample_df
 
 ### inference for predicting results
-inference_file_path = r'pickles/'
-trained_model,label_encoder,scaler,explainer = load_inference_artifacts(inference_file_path)
-predict(trained_model,label_encoder,scaler,explainer, sample_df)
+def run_sample_inference(inference_file_path, df):
+    trained_model,label_encoder,scaler,explainer = load_inference_artifacts(inference_file_path)
+    predict(trained_model,label_encoder,scaler,explainer, df)
 
+
+#### pipeline ###
+start_train_model = True
+test_inference = False
+
+if start_train_model:
+    training_file_folder = r'files/mlbb/MSC/model_usage'
+    run_training_pipeline(training_file_folder)
+
+if test_inference:
+    inference_file_folder = r'files/mlbb/MSC/model_usage'
+    sample_df = run_sampling_for_inference(inference_file_folder)
+    inference_file_path = r'pickles/'
+    run_sample_inference(inference_file_path, sample_df)
 

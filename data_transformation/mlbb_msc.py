@@ -21,8 +21,6 @@ def clean_mlbb_msc_dataset(csv):
     pairs_df['team2_group_win'] = df['loser_group_win']
     pairs_df['team1_group_loss'] = df['winner_group_loss']
     pairs_df['team2_group_loss'] = df['loser_group_loss']
-    pairs_df['team1_score'] = df['winner_score']
-    pairs_df['team2_score'] = df['loser_score']
     pairs_df['year'] = df['Year']
     pairs_df['tournament'] = df['Tournament']
     pairs_df['outcome'] = 1  # Team 1 (winner) wins
@@ -39,8 +37,6 @@ def clean_mlbb_msc_dataset(csv):
     pairs_df_reverse['team2_group_win'] = df['winner_group_win']
     pairs_df_reverse['team1_group_loss'] = df['loser_group_loss']
     pairs_df_reverse['team2_group_loss'] = df['winner_group_loss']
-    pairs_df_reverse['team1_score'] = df['loser_score']
-    pairs_df_reverse['team2_score'] = df['winner_score']
     pairs_df_reverse['year'] = df['Year']
     pairs_df_reverse['tournament'] = df['Tournament']
     pairs_df_reverse['outcome'] = 0  # Team 2 (winner) wins
@@ -76,7 +72,10 @@ def do_feature_engineering(df):
 
     print('Exported training and testing files')
 
+def run_transformation_pipeline(csv):
+    clean_mlbb_msc_dataset(csv)
+    df = pd.read_csv(r'files/mlbb/MSC/model_usage/msc_input_model_data.csv')
+    do_feature_engineering(df)
+
 # csv = r'files/mlbb/MSC/all_years.csv'
-# clean_mlbb_msc_dataset(csv)
-df = pd.read_csv(r'files/mlbb/MSC/model_usage/msc_input_model_data.csv')
-do_feature_engineering(df)
+# run_transformation_pipeline(csv)
