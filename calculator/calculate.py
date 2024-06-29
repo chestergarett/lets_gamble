@@ -26,9 +26,16 @@ def compute_possibilities(allocation_per_game, odds_per_game):
     
     return sorted(set(possibilities))
 
-odds_per_game = {1: 2, 2: 1.5, 3: 2.4, 4: 1.5}
-capital = 10000
+def run_calculator_pipeline(capital,odds_per_game):
+    allocation_per_game = allocate_capital_per_game(capital, odds_per_game)
+    possibilities = compute_possibilities(allocation_per_game, odds_per_game)
 
-allocation_per_game = allocate_capital_per_game(capital, odds_per_game)
-possibilities = compute_possibilities(allocation_per_game, odds_per_game)
-print(possibilities)
+    return allocation_per_game,possibilities
+
+
+# odds_per_game = {1: 2, 2: 1.5, 3: 2.4, 4: 1.5}
+# capital = 10000
+
+# allocation_per_game = allocate_capital_per_game(capital, odds_per_game)
+# possibilities = compute_possibilities(allocation_per_game, odds_per_game)
+# print(possibilities)

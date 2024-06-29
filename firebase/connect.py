@@ -6,7 +6,6 @@ import pandas as pd
 def establish_connection():
     cred = credentials.Certificate('key.json')
     app = firebase_admin.get_app()
-
     if not app:
         app = firebase_admin.initialize_app(cred)
 
