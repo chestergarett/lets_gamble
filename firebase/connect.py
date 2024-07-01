@@ -4,10 +4,12 @@ from firebase_admin import firestore
 import pandas as pd
 
 def establish_connection():
-    cred = credentials.Certificate('key.json')
-    app = firebase_admin.get_app()
-    if not app:
+    
+    if not firebase_admin._apps:
+        cred = credentials.Certificate('key.json')
         app = firebase_admin.initialize_app(cred)
+    else:
+        app = firebase_admin.get_app()
 
     return app
 
