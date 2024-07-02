@@ -109,7 +109,7 @@ def run_sample_inference(inference_file_path, df):
 
 
 #### pipeline ###
-start_train_model = True
+start_train_model = False
 test_inference = False
 
 if start_train_model:

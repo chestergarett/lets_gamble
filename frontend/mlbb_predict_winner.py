@@ -2,8 +2,27 @@ import streamlit as st
 import pandas as pd
 import os
 from models.mlbb_msc_xgboost import predict, load_inference_artifacts
+from models.mlbb_msc_ann import predict_ann, load_inference_artifacts_ann
 import plotly.express as px
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
+class ANNModel(nn.Module):
+    def __init__(self, input_size):
+        super(ANNModel, self).__init__()
+        self.fc_layers = nn.Sequential(
+            nn.Linear(input_size, 64),
+            nn.ReLU(),
+            nn.Linear(64, 32),
+            nn.Linear(32, 1),
+            nn.Sigmoid()
+        )
+        
+    def forward(self, x):
+        x =  self.fc_layers(x)
+        return x
+        
 def app():
     st.title('MLBB predict winner')
     
@@ -50,20 +69,37 @@ def app():
     st.write("Entered Data:")
     st.json(entered_data)
 
+    col1, col2 = st.columns(2)
     #for model prediction
+    
     inference_file_path = r'pickles/'
     trained_model,label_encoder,scaler,explainer = load_inference_artifacts(inference_file_path)
-    
-    if st.button("Predict"):
-        X_column_dict = read_X_train_cols()
-        for_prediction_features = match_entry_data(entered_data, X_column_dict)
-        prediction_results = predict(trained_model,label_encoder,scaler,explainer, for_prediction_features)
-        explanation = prediction_results[0]['explanation']
-        explanation_df = pd.DataFrame(explanation.items(), columns=['Feature', 'SHAP Value'])
-        predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
-        fig = px.bar(explanation_df, x='Feature', y='SHAP Value', title='Top 3 Features Contributing to Prediction')
-        st.write(f"Predicted Winner: {predicted_winner}")
-        st.plotly_chart(fig)
+    trained_model_state_dict,label_encoder,scaler,explainer_ann = load_inference_artifacts_ann(inference_file_path)
+
+    with col1:
+        if st.button("Predict via XgBoost"):
+            X_column_dict = read_X_train_cols()
+            for_prediction_features = match_entry_data(entered_data, X_column_dict)
+            prediction_results = predict(trained_model,label_encoder,scaler,explainer, for_prediction_features)
+            explanation = prediction_results[0]['explanation']
+            explanation_df = pd.DataFrame(explanation.items(), columns=['Feature', 'SHAP Value'])
+            predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
+            fig = px.bar(explanation_df, x='Feature', y='SHAP Value', title='Top 3 Features Contributing to Prediction')
+            st.write(f"Predicted Winner: {predicted_winner}")
+            st.plotly_chart(fig)
+
+    with col2:
+        if st.button("Predict via ANN"):
+            X_column_dict = read_X_train_cols()
+            for_prediction_features = match_entry_data(entered_data, X_column_dict)
+            trained_model = ANNModel(len(X_column_dict))
+            prediction_results = predict_ann(trained_model, trained_model_state_dict,label_encoder,scaler,explainer_ann, for_prediction_features)
+            explanation = prediction_results[0]['explanation']
+            explanation_df = pd.DataFrame(explanation.items(), columns=['Feature', 'SHAP Value'])
+            predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
+            fig = px.bar(explanation_df, x='Feature', y='SHAP Value', title='Top 3 Features Contributing to Prediction')
+            st.write(f"Predicted Winner: {predicted_winner}")
+            st.plotly_chart(fig)
         
 def read_X_train_cols():
     df = pd.read_csv(r'files/mlbb/MSC/model_usage/X_train.csv')
