@@ -1,5 +1,7 @@
 import streamlit as st
 from calculator.calculate import run_calculator_pipeline
+import numpy as np
+import pandas as pd
 
 def app():
     st.title("Risk Calculator")
@@ -29,4 +31,14 @@ def app():
         odds_per_game = {index: item for index, item in enumerate(st.session_state.right_inputs)}
         allocation_per_game, possibilities = run_calculator_pipeline(capital,odds_per_game)
 
-        st.write(f"If you allocate {allocation_per_game}, you have a chance to gain/lose the ff: {possibilities}")
+        min_value = np.min(possibilities)
+        median_value = np.median(possibilities)
+        max_value = np.max(possibilities)
+
+        data = {
+            'Scenario': ['Worst Scenario', 'Median Scenario', 'Best Scenario'],
+            'Value': [min_value, median_value, max_value]
+        }
+        df = pd.DataFrame(data)
+        st.write(f"If you allocate {allocation_per_game[0]} per game, you have a chance to gain/lose the ff:")
+        st.table(df)

@@ -19,10 +19,20 @@ def get_bet_logs():
     docs = bet_collection.stream()
     doc_array = []
     for doc in docs:
-        doc_array.append(doc.to_dict())
+        doc_dict = doc.to_dict()
+        doc_dict['id'] = doc.id
+        doc_array.append(doc_dict)
 
     bet_df = pd.DataFrame(doc_array)
+    bet_df.set_index('id', inplace=True)
     return bet_df
+
+def edit_single_bet(doc_id, updated_data):
+    db = firestore.client()
+    bet_collection = db.collection('bet-log')
+    bet_collection.document(doc_id).update(updated_data)
+
+    print('Successfully edited record')
 
 def add_bets_to_db(transactions):
     db = firestore.client()
