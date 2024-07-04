@@ -11,8 +11,11 @@ class ANNModel(nn.Module):
         super(ANNModel, self).__init__()
         self.fc_layers = nn.Sequential(
             nn.Linear(input_size, 64),
+            nn.Dropout(0.2),
             nn.ReLU(),
             nn.Linear(64, 32),
+            nn.Dropout(0.2),
+            nn.ReLU(),
             nn.Linear(32, 1),
             nn.Sigmoid()
         )
@@ -21,7 +24,7 @@ class ANNModel(nn.Module):
         x =  self.fc_layers(x)
         return x
     
-def train_model_ann(X_train, X_test, y_train, y_test, epochs=100, batch_size=32):
+def train_model_ann(X_train, X_test, y_train, y_test, epochs=100, batch_size=10):
     X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
     X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
     y_train_tensor = torch.tensor(y_train, dtype=torch.float32).view(-1, 1)
