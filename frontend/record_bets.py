@@ -1,16 +1,19 @@
 import streamlit as st
+import numpy as np
+import os
 from firebase.connect import run_save_transactions_pipeline
+from dotenv import load_dotenv
+
+load_dotenv()
+AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
-    # Initialize session state to store transactions and count of rows
     if 'transactions' not in st.session_state:
         st.session_state['transactions'] = []
     if 'transaction_count' not in st.session_state:
         st.session_state['transaction_count'] = 1
 
-    # Function to add a new row of input fields
     def add_transaction():
-        # Check if all fields are filled
         for i in range(st.session_state['transaction_count']):
             if (st.session_state.get(f'game_{i}', '') == '' or
                 st.session_state.get(f'tournament_{i}', '') == '' or
@@ -21,13 +24,15 @@ def app():
                 st.error('Fields not filled')
                 return
 
-        # Increment the transaction count
         st.session_state['transaction_count'] += 1
         st.experimental_rerun()
 
-    # Function to save all transactions
     def save_transactions():
-        # Clear existing transactions before saving
+        auth_key = st.session_state.get('auth_key', '')
+        if auth_key != AUTHENTICATION_KEY:
+            st.error("Invalid authentication key. Transactions not saved.")
+            return
+        
         st.session_state['transactions'] = []
         for i in range(st.session_state['transaction_count']):
             transaction = {
@@ -60,15 +65,13 @@ def app():
         with cols[5]:
             st.text_input('Bet Against', key=f'bet_against_{i}')
 
-    # Add transaction button
+    st.text_input('Please enter authentication key to be able to save the transaction', key='auth_key', type='password')
     if st.button('Add'):
         add_transaction()
 
-    # Save transactions button
     if st.button('Save'):
         save_transactions()
 
-    # Display the list of transactions
     if st.session_state['transactions']:
         st.write("Transactions:")
         for transaction in st.session_state['transactions']:

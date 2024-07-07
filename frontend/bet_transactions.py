@@ -1,7 +1,12 @@
 import pandas as pd
 import streamlit as st
 import plotly.express as px
+import os
+from dotenv import load_dotenv
 from firebase.connect import run_firebase_pipeline, edit_single_bet
+
+load_dotenv()
+AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
     bet_df = run_firebase_pipeline()
@@ -62,9 +67,15 @@ def app():
             win_loss_amount = st.number_input("Win/Loss Amount", value=selected_data['win_loss_amount'])
             bet_with = st.text_input("Bet With", selected_data['bet_with'])
             bet_against = st.text_input("Bet Against", selected_data['bet_against'])
-
+            st.text_input('Please enter authentication key to be able to save the transaction', key='auth_key', type='password')
+            
             updated_data = {}
             if st.form_submit_button("Save"):
+                auth_key = st.session_state.get('auth_key', '')
+                if auth_key != AUTHENTICATION_KEY:
+                    st.error("Invalid authentication key. Transactions not saved.")
+                    return
+                
                 updated_data['game'] = game
                 updated_data['tournament'] = tournament
                 updated_data['bet_amount'] = bet_amount
