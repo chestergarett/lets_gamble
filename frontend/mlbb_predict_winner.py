@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from models.mlbb_msc_xgboost import predict, load_inference_artifacts
 from models.mlbb_msc_ann import predict_ann, load_inference_artifacts_ann
+from firebase.connect import run_save_predicted_winners
 import plotly.express as px
 import torch
 import torch.nn as nn
@@ -29,6 +30,9 @@ class ANNModel(nn.Module):
 def app():
     st.title('MLBB predict winner')
     
+    if 'prediction_made' not in st.session_state:
+        st.session_state.prediction_made = False
+        st.session_state.entered_data = {}
     # Create columns
     col1, col2 = st.columns(2)
     
@@ -81,28 +85,59 @@ def app():
 
     with col1:
         if st.button("Predict via XgBoost"):
+            st.session_state.prediction_made = True
+            st.session_state.entered_data = entered_data
             X_column_dict = read_X_train_cols()
             for_prediction_features = match_entry_data(entered_data, X_column_dict)
             prediction_results = predict(trained_model,label_encoder,scaler,explainer, for_prediction_features)
             explanation = prediction_results[0]['explanation']
             explanation_df = pd.DataFrame(explanation.items(), columns=['Feature', 'SHAP Value'])
-            predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
+            st.session_state.predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
             fig = px.bar(explanation_df, x='Feature', y='SHAP Value', title='Top 3 Features Contributing to Prediction')
-            st.write(f"Predicted Winner: {predicted_winner}")
+            st.write(f"Predicted Winner: {st.session_state.predicted_winner}")
             st.plotly_chart(fig)
+
+        if st.session_state.prediction_made:
+            st.session_state.entered_data['model'] = 'XgBoost'
+            st.session_state.entered_data['predicted_winner'] = st.session_state.predicted_winner
+            st.session_state.entered_data['actual_winner'] = ''
+            
+            if st.button("Save XgBoost Prediction"):
+                try:
+                    run_save_predicted_winners(st.session_state.entered_data)
+                    st.success('Prediction saved successfully.')
+                except Exception as e:
+                    st.error(f"Error saving prediction: {e}")
+                    print(f"Error: {e}")
+
 
     with col2:
         if st.button("Predict via ANN"):
+            st.session_state.prediction_made = True
+            st.session_state.entered_data = entered_data
             X_column_dict = read_X_train_cols()
             for_prediction_features = match_entry_data(entered_data, X_column_dict)
             trained_model = ANNModel(len(X_column_dict))
             prediction_results = predict_ann(trained_model, trained_model_state_dict,label_encoder,scaler,explainer_ann, for_prediction_features)
             explanation = prediction_results[0]['explanation']
             explanation_df = pd.DataFrame(explanation.items(), columns=['Feature', 'SHAP Value'])
-            predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
+            st.session_state.predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
             fig = px.bar(explanation_df, x='Feature', y='SHAP Value', title='Top 3 Features Contributing to Prediction')
-            st.write(f"Predicted Winner: {predicted_winner}")
+            st.write(f"Predicted Winner: {st.session_state.predicted_winner}")
             st.plotly_chart(fig)
+
+        if st.session_state.prediction_made:
+            st.session_state.entered_data['model'] = 'ANN'
+            st.session_state.entered_data['predicted_winner'] = st.session_state.predicted_winner
+            st.session_state.entered_data['actual_winner'] = ''
+            
+            if st.button("Save ANN Prediction"):
+                try:
+                    run_save_predicted_winners(st.session_state.entered_data)
+                    st.success('Prediction saved successfully.')
+                except Exception as e:
+                    st.error(f"Error saving prediction: {e}")
+                    print(f"Error: {e}")
         
 def read_X_train_cols():
     df = pd.read_csv(r'files/mlbb/MSC/model_usage/X_train.csv')
