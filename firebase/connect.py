@@ -70,12 +70,24 @@ def add_predicted_winners_to_db(transaction):
 
     print('Transactions uploaded to Firestore')
 
+def add_matches_to_db(transactions):
+    db = firestore.client()
+    match_odds_collection = db.collection('match-odds-log')
+    for transaction in transactions:
+        match_odds_collection.document().set(transaction)
+
+    print('Transactions uploaded to Firestore')
+
 def run_firebase_pipeline():
     establish_connection()
     bet_df = get_bet_logs()
     
     return bet_df
 
+def run_save_match_odds(transactions):
+    establish_connection()
+    add_matches_to_db(transactions)
+    
 def run_save_transactions_pipeline(transactions):
     establish_connection()
     add_bets_to_db(transactions)
