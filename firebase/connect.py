@@ -41,9 +41,30 @@ def get_model_prediction_logs():
     pred_df.set_index('id', inplace=True)
     return pred_df
 
+def get_match_odds_logs():
+    db = firestore.client()
+    odds_collection = db.collection('match-odds-log')
+    docs = odds_collection.stream()
+    doc_array = []
+    for doc in docs:
+        doc_dict = doc.to_dict()
+        doc_dict['id'] = doc.id
+        doc_array.append(doc_dict)
+
+    odds_df = pd.DataFrame(doc_array)
+    odds_df.set_index('id', inplace=True)
+    return odds_df
+
 def edit_single_bet(doc_id, updated_data):
     db = firestore.client()
     bet_collection = db.collection('bet-log')
+    bet_collection.document(doc_id).update(updated_data)
+
+    print('Successfully edited record')
+
+def edit_single_match(doc_id, updated_data):
+    db = firestore.client()
+    bet_collection = db.collection('match-odds-log')
     bet_collection.document(doc_id).update(updated_data)
 
     print('Successfully edited record')
@@ -83,6 +104,13 @@ def run_firebase_pipeline():
     bet_df = get_bet_logs()
     
     return bet_df
+
+def run_odds_pipeline():
+    establish_connection()
+    get_match_odds_logs()
+    match_odds_df = get_match_odds_logs()
+
+    return match_odds_df
 
 def run_save_match_odds(transactions):
     establish_connection()

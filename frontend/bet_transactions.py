@@ -18,6 +18,13 @@ def app():
     bet_df = bet_df.sort_values(by='win_loss_code', ascending=False)
 
     st.title('BET History')
+    # Dropdown to filter by game
+    games = bet_df['game'].unique()
+    selected_game = st.selectbox('Select a game to filter', ['All'] + list(games))
+
+    if selected_game != 'All':
+        bet_df = bet_df[bet_df['game'] == selected_game]
+        
     # win/loss pie chart
     col1, col2 = st.columns(2)
     with col1:

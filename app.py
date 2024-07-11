@@ -1,13 +1,14 @@
 import streamlit as st
-from  frontend import mlbb_msc_stats,mlbb_predict_winner,bet_transactions,record_bets, risk_calculator, mlbb_model_ab_test
+from  frontend import mlbb_msc_stats,mlbb_predict_winner,bet_transactions,record_bets, risk_calculator, mlbb_model_ab_test,match_odds_logs
 
 pages = {
     "MLBB Stats": mlbb_msc_stats,
     "MLBB Predict Winner": mlbb_predict_winner,
     "MLBB Prediction A/B Tests": mlbb_model_ab_test,
     "BET Record History": bet_transactions,
+    "Match Odds History": match_odds_logs,
     "Record Bets": record_bets,
-    "Risk Calculator": risk_calculator
+    "Risk Calculator": risk_calculator,
 }
 
 st.sidebar.title('Navigation')
