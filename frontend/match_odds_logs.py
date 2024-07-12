@@ -26,7 +26,7 @@ def get_losing_odds(x):
         return x['left_odds']
     if x['winner']!=x['right_team_name']:
         return x['right_odds']
-    
+
 def app():
     match_odds_df = run_odds_pipeline()
     games = match_odds_df['game'].unique()
@@ -83,6 +83,10 @@ def app():
 
         # Display the chart using Streamlit
         st.plotly_chart(fig)
+
+        odds_summary = is_winner_df.groupby(['winning_odds', 'losing_odds']).size().reset_index(name='count')
+        st.dataframe(odds_summary)
+
 
     ordered_columns = ['game', 'date', 'left_team_name', 'left_odds', 'right_team_name', 'right_odds', 'winner']
     match_odds_df = match_odds_df[ordered_columns]
