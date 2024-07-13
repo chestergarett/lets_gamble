@@ -3,13 +3,14 @@ import streamlit as st
 import plotly.express as px
 import os
 from dotenv import load_dotenv
-from firebase.connect import run_ab_test_pipeline, edit_single_prediction
+from jobs.get_all_firebase_data import load_offline_df
+from firebase.connect import edit_single_prediction
 
 load_dotenv()
 AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
-    pred_df = run_ab_test_pipeline()
+    pred_df = load_offline_df('model_prediction_logs')
 
     ordered_columns = ['model', 'team1', 'team2', 'predicted_winner', 'actual_winner', 'tournament']
     pred_df = pred_df[ordered_columns]

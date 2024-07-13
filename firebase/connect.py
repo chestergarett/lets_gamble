@@ -99,18 +99,19 @@ def add_matches_to_db(transactions):
 
     print('Transactions uploaded to Firestore')
 
-def run_firebase_pipeline():
+def run_firebase_pipeline(data_type):
     establish_connection()
-    bet_df = get_bet_logs()
+    if data_type=='bet_logs':
+        bet_df = get_bet_logs()
+        return bet_df
+    if data_type=='match_logs':
+        match_odds_df = get_match_odds_logs()
+        return match_odds_df
+    if data_type=='model_prediction_logs':
+        pred_df = get_model_prediction_logs()
+        return pred_df
     
-    return bet_df
-
-def run_odds_pipeline():
-    establish_connection()
-    get_match_odds_logs()
-    match_odds_df = get_match_odds_logs()
-
-    return match_odds_df
+    return 'Unknown document collection'
 
 def run_save_match_odds(transactions):
     establish_connection()
@@ -123,9 +124,3 @@ def run_save_transactions_pipeline(transactions):
 def run_save_predicted_winners(transaction):
     establish_connection()
     add_predicted_winners_to_db(transaction)
-
-def run_ab_test_pipeline():
-    establish_connection()
-    pred_df = get_model_prediction_logs()
-
-    return pred_df

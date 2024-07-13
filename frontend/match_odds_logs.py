@@ -1,10 +1,12 @@
 import os
+import numpy as np
 import pandas as pd
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 from dotenv import load_dotenv
-from firebase.connect import run_odds_pipeline, edit_single_match
+from firebase.connect import edit_single_match
+from jobs.get_all_firebase_data import load_offline_df
 from datetime import datetime
 
 
@@ -27,11 +29,23 @@ def get_losing_odds(x):
     if x['winner']!=x['right_team_name']:
         return x['right_odds']
 
+def find_matching_winning_odds(row, odds_summary):
+    match = odds_summary.loc[odds_summary['winning_odds'] == row['losing_odds'], 'winning_odds']
+    if not match.empty:
+        return match.iloc[0]
+    return None
+
+def find_matching_winning_count(row, odds_summary):
+    match = odds_summary.loc[odds_summary['winning_odds'] == row['losing_odds'], 'winning_count']
+    if not match.empty:
+        return match.iloc[0]
+    return None
+
 def app():
-    match_odds_df = run_odds_pipeline()
+    match_odds_df = load_offline_df('match_logs')
     games = match_odds_df['game'].unique()
     selected_game = st.selectbox('Select a game to filter', games)
-    is_winner_df = match_odds_df[(match_odds_df['winner']!='') & (match_odds_df['game']==selected_game)]
+    is_winner_df = match_odds_df[(match_odds_df['winner'].notna()) & (match_odds_df['game']==selected_game)]
     if not is_winner_df.empty:
         is_winner_df['winning_odds'] = is_winner_df.apply(lambda x: get_winning_odds(x),axis=1)
         is_winner_df['losing_odds'] = is_winner_df.apply(lambda x: get_losing_odds(x),axis=1)
@@ -84,8 +98,17 @@ def app():
         # Display the chart using Streamlit
         st.plotly_chart(fig)
 
-        odds_summary = is_winner_df.groupby(['winning_odds', 'losing_odds']).size().reset_index(name='count')
-        st.dataframe(odds_summary)
+        odds_summary = is_winner_df.groupby(['winning_odds', 'losing_odds']).size().reset_index(name='winning_count')
+        odds_summary['winning_odds_lost_to'] = odds_summary.apply(lambda x: find_matching_winning_odds(x, odds_summary), axis=1).fillna(0)
+        odds_summary['winning_odds_lost_to_count'] = odds_summary.apply(lambda x: find_matching_winning_count(x, odds_summary), axis=1).fillna(0)
+        odds_summary['total_matches'] = odds_summary['winning_count'] + odds_summary['winning_odds_lost_to_count']
+        odds_summary['chance_to_win_%'] = ((odds_summary['winning_count'] / odds_summary['total_matches']) * 100)
+        odds_summary['chance_to_win_%'] = odds_summary['chance_to_win_%'].replace([np.inf, -np.inf], np.nan).fillna(100).round().astype(int)
+        odds_summary['possible_win_amount'] = ((odds_summary['winning_odds'].astype(int)+.2) * odds_summary['winning_count'].astype(int) * 85)
+        odds_summary['possible_loss_amount'] = (odds_summary['winning_odds_lost_to_count'].astype(int) * -85)
+        odds_summary['possible_total_amt_inv'] = (odds_summary['total_matches'] * 85)
+        odds_summary['inc_or_dec_capital'] = ((odds_summary['possible_win_amount']/odds_summary['possible_total_amt_inv'])).astype(float)
+        st.dataframe(odds_summary,use_container_width=True)
 
 
     ordered_columns = ['game', 'date', 'left_team_name', 'left_odds', 'right_team_name', 'right_odds', 'winner']

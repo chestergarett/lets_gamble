@@ -4,11 +4,11 @@ from  frontend import mlbb_msc_stats,mlbb_predict_winner,bet_transactions,record
 pages = {
     "BET Record History": bet_transactions,
     "Match Odds History": match_odds_logs,
+    "Risk Calculator": risk_calculator,
     "Record Bets": record_bets,
     "MLBB Prediction A/B Tests": mlbb_model_ab_test,
     "MLBB Predict Winner": mlbb_predict_winner,
     "MLBB Stats": mlbb_msc_stats,
-    "Risk Calculator": risk_calculator,
 }
 
 st.sidebar.title('Navigation')

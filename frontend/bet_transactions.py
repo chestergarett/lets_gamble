@@ -3,13 +3,14 @@ import streamlit as st
 import plotly.express as px
 import os
 from dotenv import load_dotenv
-from firebase.connect import run_firebase_pipeline, edit_single_bet
+from firebase.connect import edit_single_bet
+from jobs.get_all_firebase_data import load_offline_df
 
 load_dotenv()
 AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
-    bet_df = run_firebase_pipeline()
+    bet_df = load_offline_df('bet_logs')
 
     ordered_columns = ['game', 'tournament', 'bet_amount', 'odds', 'win_loss_code', 'win_loss_amount', 'bet_with', 'bet_against']
     bet_df = bet_df[ordered_columns]
