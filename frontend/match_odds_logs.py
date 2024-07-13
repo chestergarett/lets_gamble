@@ -12,6 +12,7 @@ from datetime import datetime
 
 load_dotenv()
 AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
+
 current_year = datetime.now().year
 
 def convert_to_datetime(date_str):

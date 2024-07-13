@@ -56,6 +56,7 @@ def get_match_odds_logs():
     return odds_df
 
 def edit_single_bet(doc_id, updated_data):
+    establish_connection()
     db = firestore.client()
     bet_collection = db.collection('bet-log')
     bet_collection.document(doc_id).update(updated_data)
@@ -63,6 +64,7 @@ def edit_single_bet(doc_id, updated_data):
     print('Successfully edited record')
 
 def edit_single_match(doc_id, updated_data):
+    establish_connection()
     db = firestore.client()
     bet_collection = db.collection('match-odds-log')
     bet_collection.document(doc_id).update(updated_data)
@@ -70,6 +72,7 @@ def edit_single_match(doc_id, updated_data):
     print('Successfully edited record')
 
 def edit_single_prediction(doc_id, updated_data):
+    establish_connection()
     db = firestore.client()
     bet_collection = db.collection('model-hypothesis-test')
     bet_collection.document(doc_id).update(updated_data)
