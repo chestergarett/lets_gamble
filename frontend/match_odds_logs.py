@@ -46,10 +46,11 @@ def app():
     match_odds_df = load_offline_df('match_logs')
     games = match_odds_df['game'].unique()
     selected_game = st.selectbox('Select a game to filter', games)
-    is_winner_df = match_odds_df[(match_odds_df['winner'].notna()) & (match_odds_df['game']==selected_game)]
+    is_winner_df = match_odds_df[(match_odds_df['winner'].notna()) & (match_odds_df['game']==selected_game) & ((match_odds_df['winner']!='Draw'))]
     if not is_winner_df.empty:
         is_winner_df['winning_odds'] = is_winner_df.apply(lambda x: get_winning_odds(x),axis=1)
         is_winner_df['losing_odds'] = is_winner_df.apply(lambda x: get_losing_odds(x),axis=1)
+        print(is_winner_df)
         is_winner_df['winning_odds'] = is_winner_df['winning_odds'].astype(float).astype(int).astype(str)
         is_winner_df['losing_odds'] = is_winner_df['losing_odds'].astype(float).astype(int).astype(str)
         
