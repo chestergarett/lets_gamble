@@ -24,7 +24,7 @@ class RivalryScraper:
             draw_odds = div.select_one('button.middle-competitor .outcome-odds').text.strip() if div.select_one('button.middle-competitor .outcome-odds') else None
             left_team = div.select_one('button.right-facing-competitor .outcome-name').text.strip()
             left_team_odds = div.select_one('button.right-facing-competitor .outcome-odds').text.strip()
-            date = div.select_one('strong').text
+            date = div.select_one('strong').textß
             date = re.sub(r'\s+', ' ', date).strip() if date else None
             
             match_odds = {
