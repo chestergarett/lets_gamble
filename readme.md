@@ -1,5 +1,4 @@
-betting calculator to try to improve odds
-
+Is it possible to earn consistent money while wasting time binge-watching my favorite teams from my favorite sports? While the athletes earn big money - we the commoners, earn belly fat and exposed radiation. Hence, I aim to explore the idea of having a system in place to earn consistent returns in sports betting - to enjoy the show from the TV set at the same time have a slice of the pie.
 
 ### ESPORTS
 - MLBB list of upcoming tournaments:
