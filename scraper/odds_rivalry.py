@@ -53,24 +53,26 @@ def run_scraper_pipeline(games_dict,game_type):
         print(f'Successfully scraped {game_key}')
 
 esports_dict = {
-    'wildrift': 'league-of-legends-wild-rift',
-    'hok': 'honor-of-kings',
-    'codm': 'call-of-duty-mobile',
-    'starcraft': 'starcraft',
-    'nba2k': 'nba2k',
-    'r6': 'r6',
-    'fc': 'fc',
-    'cod': 'call-of-duty',
-    'csgo': 'csgo',
-    'valorant': 'valorant',
-    'lol': 'league-of-legends',
-    'dota2': 'dota-2',
+    # 'wildrift': 'league-of-legends-wild-rift',
+    # 'hok': 'honor-of-kings',
+    # 'codm': 'call-of-duty-mobile',
+    # 'starcraft': 'starcraft',
+    # 'nba2k': 'nba2k',
+    # 'r6': 'r6',
+    # 'fc': 'fc',
+    # 'cod': 'call-of-duty',
+    # 'csgo': 'csgo',
+    # 'valorant': 'valorant',
+    # 'lol': 'league-of-legends',
+    # 'dota2': 'dota-2',
+    'rocket-league': 'rocket-league'
 }
 
 sports_dict = {
-    'boxing': 'boxing',
-    'mma': 'mma'
+    # 'boxing': 'boxing',
+    # 'mma': 'mma'
+    # 'baseball': 'baseball'
 }
     
-run_scraper_pipeline(esports_dict,'esports')
-run_scraper_pipeline(sports_dict, 'sports')
+# run_scraper_pipeline(sports_dict, 'sports')
+run_scraper_pipeline(esports_dict, 'esports')

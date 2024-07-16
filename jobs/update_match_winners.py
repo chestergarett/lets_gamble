@@ -13,7 +13,7 @@ current_year = datetime.now().year
 current_date = datetime.now()
 
 def convert_to_datetime(date_str):
-    return pd.to_datetime(f"{date_str} {current_year}", format='%b %d %Y')
+    return pd.to_datetime(f"{date_str}", format='%Y-%m-%d')
 
 def clean_winner_text(text):
     if pd.notna(text) and 'Winner!' in text:
@@ -21,6 +21,7 @@ def clean_winner_text(text):
         cleaned_text = ' '.join(words[1:]).replace('Winner!', '').strip()
         
         return cleaned_text
+    return text
 
 def get_matches_completed():
     filepath = r'files/offline_logs'
@@ -46,7 +47,7 @@ def search_for_link_winner_of_match(query):
         links = [item['link'] for item in results['items']]
         return links[0]
     else:
-        print(results.error, results.error.message)
+        print(results)
         return None
 
 def scrape_link_match_winner(link):
@@ -71,15 +72,18 @@ def loop_each_row_and_get_winner(matches_completed_df):
         right_team_name = row['right_team_name'].replace(' ', '-')
         query = f'{game} {left_team_name}-vs-{right_team_name} {date}'
         link = search_for_link_winner_of_match(query)
-        
+        print('link', link)
         if link:
             texts = scrape_link_match_winner(link)
+            winner_found = False
             for text in texts:
                 if 'winner' in text.lower():
                     matches_completed_df.at[index, 'winner'] = clean_winner_text(text)
                     winner_found = True  
             if not winner_found: 
                 matches_completed_df.at[index, 'winner'] = 'Draw'
+
+            break   
         else:
             print(query, link)
             break
@@ -89,6 +93,8 @@ def loop_each_row_and_get_winner(matches_completed_df):
 def update_match_odds_df(match_odds_df, matches_completed_df):
     filepath = r'files/offline_logs'
     matches_completed_df['winner'] = matches_completed_df['winner'].apply(clean_winner_text)
+    match_odds_df = match_odds_df.reset_index()
+    matches_completed_df = matches_completed_df.reset_index()
     merged_df = match_odds_df.merge(matches_completed_df[['id', 'winner']],
                                 on=['id'],
                                 how='left')
@@ -110,3 +116,4 @@ def merge_offline_completed_winners():
     matches_completed_df =pd.read_csv(f'{filepath}/matches_completed_df.csv')
     update_match_odds_df(match_odds_df, matches_completed_df)
 
+scrape_matches_completed_winners()

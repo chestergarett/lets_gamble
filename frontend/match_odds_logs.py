@@ -16,7 +16,7 @@ AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 current_year = datetime.now().year
 
 def convert_to_datetime(date_str):
-    return pd.to_datetime(f"{date_str} {current_year}", format='%b %d %Y')
+    return pd.to_datetime(f"{date_str}", format='%Y-%m-%d')
 
 def get_winning_odds(x):
     if x['winner']==x['left_team_name']:

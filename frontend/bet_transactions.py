@@ -40,7 +40,6 @@ def app():
         #insert bar chart for win_amount and loss_amount
         filtered_amounts_df = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]
         win_loss_amounts = filtered_amounts_df.groupby('win_loss_code')['win_loss_amount'].sum().reset_index()
-
         # Create bar chart for win_loss_amount
         bar_fig = px.bar(win_loss_amounts, x='win_loss_code', y='win_loss_amount', title='Total Win/Loss Amount',
                          color='win_loss_code', color_discrete_map={'WIN': 'green', 'LOSS': 'red'})
