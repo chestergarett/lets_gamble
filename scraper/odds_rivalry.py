@@ -24,7 +24,7 @@ class RivalryScraper:
             draw_odds = div.select_one('button.middle-competitor .outcome-odds').text.strip() if div.select_one('button.middle-competitor .outcome-odds') else None
             left_team = div.select_one('button.right-facing-competitor .outcome-name').text.strip()
             left_team_odds = div.select_one('button.right-facing-competitor .outcome-odds').text.strip()
-            date = div.select_one('strong').textß
+            date = div.select_one('strong').text
             date = re.sub(r'\s+', ' ', date).strip() if date else None
             
             match_odds = {
@@ -65,14 +65,14 @@ esports_dict = {
     # 'valorant': 'valorant',
     # 'lol': 'league-of-legends',
     # 'dota2': 'dota-2',
-    'rocket-league': 'rocket-league'
+    # 'rocket-league': 'rocket-league'
 }
 
 sports_dict = {
     # 'boxing': 'boxing',
     # 'mma': 'mma'
-    # 'baseball': 'baseball'
+    'baseball': 'baseball'
 }
     
-# run_scraper_pipeline(sports_dict, 'sports')
-run_scraper_pipeline(esports_dict, 'esports')
+run_scraper_pipeline(sports_dict, 'sports')
+# run_scraper_pipeline(esports_dict, 'esports')

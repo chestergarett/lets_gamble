@@ -66,10 +66,21 @@ def edit_single_bet(doc_id, updated_data):
 def edit_single_match(doc_id, updated_data):
     establish_connection()
     db = firestore.client()
-    bet_collection = db.collection('match-odds-log')
-    bet_collection.document(doc_id).update(updated_data)
+    match_collection = db.collection('match-odds-log')
+    match_collection.document(doc_id).update(updated_data)
 
     print('Successfully edited record')
+
+def read_single_match(doc_id):
+    establish_connection()
+    db = firestore.client()
+    match_log_ref = db.collection('match-odds-log').document(doc_id)
+    match_log = match_log_ref.get()
+    match_log = match_log.to_dict()
+    print(doc_id,match_log['winner'])
+    if match_log['winner']=='':
+        return True
+    return False
 
 def edit_single_prediction(doc_id, updated_data):
     establish_connection()
@@ -101,6 +112,25 @@ def add_matches_to_db(transactions):
         match_odds_collection.document().set(transaction)
 
     print('Transactions uploaded to Firestore')
+
+def query_blank_winners():
+    establish_connection()
+    db = firestore.client()
+    collection_ref = db.collection('model-hypothesis-test')
+    query = collection_ref.where('actual_winner', '==', '')
+    docs = query.stream()
+
+    return docs
+
+def delete_odds_documents(collection):
+    establish_connection()
+    db = firestore.client()
+    collection_ref = db.collection(collection)
+    query = collection_ref.where('date', '==', None)
+    docs = query.stream()
+    for doc in docs:
+        doc.reference.delete()  # Delete the document
+        print(f'Deleted document with ID: {doc.id}')
 
 def run_firebase_pipeline(data_type):
     establish_connection()
