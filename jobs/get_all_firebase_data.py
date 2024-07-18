@@ -27,7 +27,7 @@ def load_offline_df(data_type):
         return match_odds_df
     
 
-save_online_data = False
+save_online_data = True
 
 if save_online_data:
     save_offline_firebase_logs()

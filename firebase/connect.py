@@ -132,6 +132,18 @@ def delete_odds_documents(collection):
         doc.reference.delete()  # Delete the document
         print(f'Deleted document with ID: {doc.id}')
 
+def check_if_update_needed(doc_id,row):
+    establish_connection()
+    db = firestore.client()
+    collection_ref = db.collection('bet-log')
+    doc = collection_ref.document(doc_id)
+    doc_dict = doc.get().to_dict()
+    if ('win_loss_code' not in doc_dict) or ('win_loss_amount' not in doc_dict) or (doc_dict['win_loss_code']!=row['win_loss_code']) or (doc_dict['win_loss_amount'] != row['win_loss_amount']):
+        update = {'win_loss_code': row['win_loss_code'], 'win_loss_amount': row['win_loss_amount']}
+        doc.update(update)
+
+        print(f'Updated Bet record {doc_id}')
+        
 def run_firebase_pipeline(data_type):
     establish_connection()
     if data_type=='bet_logs':

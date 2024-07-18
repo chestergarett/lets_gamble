@@ -16,7 +16,14 @@ AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 current_year = datetime.now().year
 
 def convert_to_datetime(date_str):
-    return pd.to_datetime(f"{date_str}", format='%Y-%m-%d')
+    try:
+        return pd.to_datetime(date_str, format='%Y-%m-%d')
+    except ValueError:
+        try:
+            return pd.to_datetime(f'{date_str} {current_year}', format='%b %d %Y')
+        except ValueError:
+            print(f"Date format not recognized: {date_str}")
+            return None
 
 def get_winning_odds(x):
     if x['winner']==x['left_team_name']:
