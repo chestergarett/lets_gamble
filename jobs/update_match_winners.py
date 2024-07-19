@@ -13,7 +13,14 @@ current_year = datetime.now().year
 current_date = datetime.now()
 
 def convert_to_datetime(date_str):
-    return pd.to_datetime(f"{date_str}", format='%Y-%m-%d')
+    try:
+        return pd.to_datetime(date_str, format='%Y-%m-%d')
+    except ValueError:
+        try:
+            return pd.to_datetime(f'{date_str} {current_year}', format='%b %d %Y')
+        except ValueError:
+            print(f"Date format not recognized: {date_str}")
+            return None
 
 def clean_winner_text(text):
     if pd.notna(text) and 'Winner!' in text:
@@ -101,6 +108,7 @@ def update_match_odds_df(match_odds_df, matches_completed_df):
     
     match_odds_df['winner'] = match_odds_df['winner'].where(match_odds_df['winner'].notnull(), merged_df['winner_y'])
     match_odds_df = match_odds_df.loc[:, ~match_odds_df.columns.str.startswith('Unnamed:')]
+    match_odds_df['date'] = match_odds_df['date'].dt.strftime('%b %d')
     match_odds_df.to_csv(f'{filepath}/match_odds_df.csv')
 
 def scrape_matches_completed_winners():
@@ -116,4 +124,4 @@ def merge_offline_completed_winners():
     matches_completed_df =pd.read_csv(f'{filepath}/matches_completed_df.csv')
     update_match_odds_df(match_odds_df, matches_completed_df)
 
-scrape_matches_completed_winners()
+# scrape_matches_completed_winners()

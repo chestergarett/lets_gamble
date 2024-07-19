@@ -77,7 +77,7 @@ def read_single_match(doc_id):
     match_log_ref = db.collection('match-odds-log').document(doc_id)
     match_log = match_log_ref.get()
     match_log = match_log.to_dict()
-    print(doc_id,match_log['winner'])
+    
     if match_log['winner']=='':
         return True
     return False
@@ -109,9 +109,28 @@ def add_matches_to_db(transactions):
     db = firestore.client()
     match_odds_collection = db.collection('match-odds-log')
     for transaction in transactions:
-        match_odds_collection.document().set(transaction)
+        right_team_name = transaction['right_team_name']
+        right_odds = transaction['right_odds']
+        left_team_name = transaction['left_team_name']
+        left_odds = transaction['left_odds']
+        draw_odds = transaction['draw_odds']
+        date = transaction['date']
+        game = transaction['game']
+        existing_transactions = match_odds_collection.where('right_team_name', '==', right_team_name) \
+                                                     .where('right_odds', '==', right_odds) \
+                                                     .where('left_team_name', '==', left_team_name) \
+                                                     .where('left_odds', '==', left_odds) \
+                                                     .where('draw_odds', '==', draw_odds) \
+                                                     .where('date', '==', date) \
+                                                     .where('game', '==', game) \
+                                                     .stream()
+        
 
-    print('Transactions uploaded to Firestore')
+        if any(existing_transactions):
+            print(f"Transaction already exists: {transaction}")
+        else:
+            match_odds_collection.document().set(transaction)
+            print(f'Transactions uploaded to Firestore: {transaction}')
 
 def query_blank_winners():
     establish_connection()

@@ -63,7 +63,7 @@ esports_dict = {
     # 'cod': 'call-of-duty',
     # 'csgo': 'csgo',
     # 'valorant': 'valorant',
-    # 'lol': 'league-of-legends',
+    'lol': 'league-of-legends',
     # 'dota2': 'dota-2',
     # 'rocket-league': 'rocket-league'
 }
@@ -74,5 +74,5 @@ sports_dict = {
     'baseball': 'baseball'
 }
     
-run_scraper_pipeline(sports_dict, 'sports')
-# run_scraper_pipeline(esports_dict, 'esports')
+# run_scraper_pipeline(sports_dict, 'sports')
+run_scraper_pipeline(esports_dict, 'esports')

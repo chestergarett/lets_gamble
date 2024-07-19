@@ -11,40 +11,25 @@ AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
     pred_df = load_offline_df('model_prediction_logs')
-
+    pred_df = pred_df.reset_index()
     ordered_columns = ['model', 'team1', 'team2', 'predicted_winner', 'actual_winner', 'tournament']
     pred_df = pred_df[ordered_columns]
+    pred_df['correct'] = pred_df['predicted_winner'] == pred_df['actual_winner']
+    accuracy_df = pred_df.groupby('model')['correct'].mean().reset_index()
+    accuracy_df.columns = ['model', 'accuracy']
+    print(accuracy_df[accuracy_df['model']=='XgBoost']['accuracy'])
+    xg_boost_accuracy = accuracy_df[accuracy_df['model']=='XgBoost']['accuracy'].values[0]
+    ann_accuracy = accuracy_df[accuracy_df['model']=='ANN']['accuracy'].values[0]
+    st.title("Model Performance")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:    
+        st.markdown(f"<div style='font-weight: bold'>XgBoost Accuracy: </div> <div style='text-align: center; color:green; font-size: 24px'>{xg_boost_accuracy:.2%}</div>", unsafe_allow_html=True)
+    with col2:    
+        st.markdown(f"<div style='font-weight: bold'>ANN Accuracy: </div> <div style='text-align: center; color:green; font-size: 24px'>{ann_accuracy:.2%}</div>", unsafe_allow_html=True)
 
+    st.title("Model A/B Test Details")
     st.dataframe(pred_df)
 
-    # Capture row selection
-    selected_row = st.selectbox('Select a row to edit', pred_df.index)
-    selected_data = pred_df.loc[selected_row]
-
-    if selected_row is not None:
-        with st.form("edit_form"):
-            model = st.text_input("model", selected_data['model'])
-            team1 = st.text_input("team1", selected_data['team1'])
-            team2 = st.text_input("team2", selected_data['team2'])
-            tournament = st.text_input("tournament", selected_data['tournament'])
-            predicted_winner = st.text_input("predicted_winner", selected_data['predicted_winner'])
-            actual_winner = st.text_input("actual_winner", selected_data['actual_winner'])
-            st.text_input('Please enter authentication key to be able to save the transaction', key='auth_key', type='password')
-            
-            updated_data = {}
-            if st.form_submit_button("Save"):
-                auth_key = st.session_state.get('auth_key', '')
-                if auth_key != AUTHENTICATION_KEY:
-                    st.error("Invalid authentication key. Transactions not saved.")
-                    return
-                
-                updated_data['model'] = model
-                updated_data['team1'] = team1
-                updated_data['team2'] = team2
-                updated_data['tournament'] = tournament
-                updated_data['predicted_winner'] = predicted_winner
-                updated_data['actual_winner'] = actual_winner
-
-                edit_single_prediction(selected_row,updated_data)
-                st.success("Row updated successfully!")
                 

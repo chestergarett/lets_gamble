@@ -57,41 +57,4 @@ def app():
 
     # Bet history details table
     st.dataframe(bet_df)
-
-    # Capture row selection
-    selected_row = st.selectbox('Select a row to edit', bet_df.index)
-    selected_data = bet_df.loc[selected_row]
-
-    if selected_row is not None:
-        with st.form("edit_form"):
-            game = st.text_input("Game", selected_data['game'])
-            tournament = st.text_input("Tournament", selected_data['tournament'])
-            bet_amount = st.number_input("Bet Amount", value=selected_data['bet_amount'])
-            odds = st.number_input("Odds", value=selected_data['odds'])
-            win_loss_options = ['WIN', 'LOSS', None]
-            default_index = win_loss_options.index(selected_data['win_loss_code']) if selected_data['win_loss_code'] in win_loss_options else None
-            win_loss_code = st.selectbox("Win/Loss Code", options=win_loss_options, index=default_index)
-            win_loss_amount = st.number_input("Win/Loss Amount", value=selected_data['win_loss_amount'])
-            bet_with = st.text_input("Bet With", selected_data['bet_with'])
-            bet_against = st.text_input("Bet Against", selected_data['bet_against'])
-            st.text_input('Please enter authentication key to be able to save the transaction', key='auth_key', type='password')
-            
-            updated_data = {}
-            if st.form_submit_button("Save"):
-                auth_key = st.session_state.get('auth_key', '')
-                if auth_key != AUTHENTICATION_KEY:
-                    st.error("Invalid authentication key. Transactions not saved.")
-                    return
-                
-                updated_data['game'] = game
-                updated_data['tournament'] = tournament
-                updated_data['bet_amount'] = bet_amount
-                updated_data['odds'] = odds
-                updated_data['win_loss_code'] = win_loss_code
-                updated_data['win_loss_amount'] = win_loss_amount
-                updated_data['bet_with'] = bet_with
-                updated_data['bet_against'] = bet_against
-
-                edit_single_bet(selected_row,updated_data)
-                st.success("Row updated successfully!")
                 
