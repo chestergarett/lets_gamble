@@ -133,7 +133,7 @@ def app():
         filtered_odds_summary = odds_summary[odds_summary['inc_or_dec_capital'] > 1]
         if not filtered_odds_summary.empty:
             st.markdown(subheader_css, unsafe_allow_html=True)
-            st.markdown('<div class="custom-subheader">Based on the samples tested, the following will result maximize yield:</div>', unsafe_allow_html=True)
+            st.markdown('<div class="custom-subheader">Based on the samples tested, the following will maximize yield:</div>', unsafe_allow_html=True)
             for index,row in filtered_odds_summary.iterrows():
                 st.markdown(f"""
                             <span>Out of {int(row['total_matches'])} matches, betting on {row['winning_odds']} odds against {row['losing_odds']} odds yielded </span> 

@@ -8,7 +8,7 @@ def app():
     col1, col2 = st.columns(2)
 
     with col1:
-        left_input = st.number_input("Left Column Input", value=0.0)
+        left_input = st.number_input("Capital", value=0.0)
 
     with col2:
         if 'right_inputs' not in st.session_state:
@@ -16,7 +16,7 @@ def app():
 
         zero_exists = False 
         for idx, val in enumerate(st.session_state.right_inputs):
-            st.session_state.right_inputs[idx] = st.number_input(f"Right Column Input {idx+1}", value=val, key=f"right_input_{idx}", format="%.2f")
+            st.session_state.right_inputs[idx] = st.number_input(f"Odds of match {idx+1}", value=val, key=f"right_input_{idx}", format="%.2f")
             if st.session_state.right_inputs[idx] == 0.0:
                 zero_exists = True
 
