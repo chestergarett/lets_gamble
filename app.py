@@ -1,7 +1,8 @@
 import streamlit as st
-from  frontend import mlbb_msc_stats,mlbb_predict_winner,bet_transactions,record_bets, risk_calculator, mlbb_model_ab_test,match_odds_logs
+from  frontend import mlbb_msc_stats,mlbb_predict_winner,bet_transactions,record_bets, risk_calculator, mlbb_model_ab_test,match_odds_logs,home
 
 pages = {
+    "Home": home,
     "BET Record History": bet_transactions,
     "Match Odds History": match_odds_logs,
     "Risk Calculator": risk_calculator,

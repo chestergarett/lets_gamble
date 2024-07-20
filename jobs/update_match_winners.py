@@ -79,7 +79,6 @@ def loop_each_row_and_get_winner(matches_completed_df):
         right_team_name = row['right_team_name'].replace(' ', '-')
         query = f'{game} {left_team_name}-vs-{right_team_name} {date}'
         link = search_for_link_winner_of_match(query)
-        print('link', link)
         if link:
             texts = scrape_link_match_winner(link)
             winner_found = False
@@ -89,11 +88,9 @@ def loop_each_row_and_get_winner(matches_completed_df):
                     winner_found = True  
             if not winner_found: 
                 matches_completed_df.at[index, 'winner'] = 'Draw'
-
-            break   
         else:
-            print(query, link)
-            break
+            print('no matches found for', query, link)
+            
 
     return matches_completed_df
 
@@ -115,6 +112,7 @@ def scrape_matches_completed_winners():
     matches_completed_df,match_odds_df = get_matches_completed()
     matches_completed_df['formatted_date'] = matches_completed_df['date'].dt.strftime('%B %d %Y')
     matches_completed_df = loop_each_row_and_get_winner(matches_completed_df)
+    matches_completed_df = matches_completed_df.loc[:, ~matches_completed_df.columns.str.startswith('Unnamed:')]
     matches_completed_df.to_csv(f'files/offline_logs/matches_completed_df.csv')
     update_match_odds_df(match_odds_df, matches_completed_df)
 
