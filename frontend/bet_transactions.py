@@ -106,9 +106,9 @@ def app():
     fig = px.bar(
         simulation_results_df,
         x='odds_set',
-        y=['total_win_loss_amount','capital_diff'],
+        y=['total_win_loss_amount'],
         labels={'odds_set': 'Odds Set', 'total_win_loss_amount': 'Total Win/Loss Amount'},
-        title='What could be best combination to maximize betting profits?',
+        title='What could be the best odds combination to maximize profits?',
         barmode='stack'
     )
     fig.for_each_trace(lambda trace: trace.update(name='Win/Loss Amount' if trace.name == 'total_win_loss_amount' else 'Capital'))
