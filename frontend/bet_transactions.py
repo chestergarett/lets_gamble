@@ -25,12 +25,24 @@ def app():
     bet_df = bet_df.sort_values(by='win_loss_code', ascending=False)
 
     st.title('Betting Performance')
+
     # Dropdown to filter by game
     games = bet_df['game'].unique()
     selected_game = st.selectbox('Select a game to filter', ['All'] + list(games))
 
+    # Filter tournaments based on selected game
+    if selected_game != 'All':
+        filtered_tournaments = bet_df[bet_df['game'] == selected_game]['tournament'].unique()
+    else:
+        filtered_tournaments = bet_df['tournament'].unique()
+    
+    selected_tournament = st.selectbox('Select a tournament to filter', ['All'] + list(filtered_tournaments))
+
+    # Apply filters
     if selected_game != 'All':
         bet_df = bet_df[bet_df['game'] == selected_game]
+    if selected_tournament != 'All':
+        bet_df = bet_df[bet_df['tournament'] == selected_tournament]
         
     # win/loss pie chart
     col1, col2 = st.columns(2)
@@ -43,10 +55,9 @@ def app():
         st.plotly_chart(fig)
 
     with col2:
-        #insert bar chart for win_amount and loss_amount
+        # Insert bar chart for win_amount and loss_amount
         filtered_amounts_df = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]
         win_loss_amounts = filtered_amounts_df.groupby('win_loss_code')['win_loss_amount'].sum().reset_index()
-        # Create bar chart for win_loss_amount
         bar_fig = px.bar(win_loss_amounts, x='win_loss_code', y='win_loss_amount', title='Total Win/Loss Amount',
                          color='win_loss_code', color_discrete_map={'WIN': 'green', 'LOSS': 'red'})
 
@@ -64,7 +75,7 @@ def app():
     # Analysis
     st.title('Post Bet Analysis')
     bet_df['odds_str'] = bet_df['odds'].astype(int).astype(str)
-    odds_win_rate_df = bet_df.groupby(['odds_str','win_loss_code'])[['win_loss_amount','bet_amount']].sum().reset_index()
+    odds_win_rate_df = bet_df.groupby(['odds_str', 'win_loss_code'])[['win_loss_amount', 'bet_amount']].sum().reset_index()
     odds_win_rate_df['bet_amount'] = odds_win_rate_df.apply(
         lambda row: 
             0 if row['win_loss_code'] == 'WIN' else row['bet_amount'],
@@ -82,6 +93,7 @@ def app():
     )
 
     st.plotly_chart(fig)
+
     # Simulation
     unique_odds = odds_win_rate_df['odds_str'].unique()
     all_combinations = []
@@ -91,12 +103,12 @@ def app():
 
     simulation_results = []
     for combination in all_combinations:
-        total_win_loss_amount,total_capital_expended = simulate_bet(combination, odds_win_rate_df)
+        total_win_loss_amount, total_capital_expended = simulate_bet(combination, odds_win_rate_df)
         simulation_results.append({
             'odds_set': ', '.join(combination),
             'total_win_loss_amount': total_win_loss_amount,
             'total_capital_expended': total_capital_expended
-    })
+        })
     simulation_results_df = pd.DataFrame(simulation_results)
     simulation_results_df['odds_set'] = simulation_results_df['odds_set'].astype(str)
     simulation_results_df['capital_diff'] = simulation_results_df['total_capital_expended'] - simulation_results_df['total_win_loss_amount']
@@ -114,6 +126,32 @@ def app():
     fig.for_each_trace(lambda trace: trace.update(name='Win/Loss Amount' if trace.name == 'total_win_loss_amount' else 'Capital'))
     fig.update_layout(xaxis_type='category')
     st.plotly_chart(fig)
+
+    # Summary table grouped by tournament
+    st.title('Performance per Tournament')
+    summary_df = filtered_bet_df.groupby(['game', 'tournament', 'win_loss_code']).agg(
+        win_loss_amount=('win_loss_amount', 'sum'),
+        number_of_bets=('tournament', 'count'),
+    ).reset_index()
+
+    # Pivot the summary dataframe
+    summary_df_pivot = summary_df.pivot_table(index=['game', 'tournament'], columns='win_loss_code', values='win_loss_amount', fill_value=0).reset_index()
+    summary_df_pivot.columns.name = None  # Remove the axis name
+    summary_df_pivot = summary_df_pivot.rename(columns={'WIN': 'win_amount', 'LOSS': 'loss_amount'})
+
+    summary_df_final = summary_df_pivot.merge(
+        summary_df.groupby(['game', 'tournament']).agg(
+            number_of_bets=('number_of_bets', 'sum'),
+        ).reset_index(),
+        on=['game', 'tournament']
+    )
+    if 'win_amount' not in summary_df_final.columns:
+        summary_df_final['win_amount'] = 0
+    if 'loss_amount' not in summary_df_final.columns:
+        summary_df_final['loss_amount'] = 0
+        
+    summary_df_final['net_profit'] = summary_df_final['win_amount'] + summary_df_final['loss_amount']
+    st.dataframe(summary_df_final)
 
     # Bet history details table
     st.title('Bet Details')
