@@ -96,7 +96,8 @@ def add_bets_to_db(transactions):
     for transaction in transactions:
         bet_collection.document().set(transaction)
 
-    print('Transactions uploaded to Firestore')
+    if len(transactions)>0:
+        print('Transactions uploaded to Firestore')
 
 def add_predicted_winners_to_db(transaction):
     db = firestore.client()
@@ -157,8 +158,13 @@ def check_if_update_needed(doc_id,row):
     collection_ref = db.collection('bet-log')
     doc = collection_ref.document(doc_id)
     doc_dict = doc.get().to_dict()
-    if ('win_loss_code' not in doc_dict) or ('win_loss_amount' not in doc_dict) or (doc_dict['win_loss_code']!=row['win_loss_code']) or (doc_dict['win_loss_amount'] != row['win_loss_amount']):
-        update = {'win_loss_code': row['win_loss_code'], 'win_loss_amount': row['win_loss_amount']}
+    if ('win_loss_code' not in doc_dict) or ('win_loss_amount' not in doc_dict) or (doc_dict['win_loss_code']!=row['win_loss_code']) or (doc_dict['win_loss_amount'] != row['win_loss_amount']) or (doc_dict['tournament'] != row['tournament']) or (doc_dict['game'] != row['game']):
+        update = {'win_loss_code': row['win_loss_code'], 
+                  'win_loss_amount': row['win_loss_amount'], 
+                  'tournament': row['tournament'], 
+                  'game': row['game']}
+        
+        print(update)
         doc.update(update)
 
         print(f'Updated Bet record {doc_id}')

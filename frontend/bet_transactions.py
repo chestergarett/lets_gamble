@@ -17,11 +17,11 @@ def simulate_bet(odds_list, df):
 
 def app():
     bet_df = load_offline_df('bet_logs')
-
-    ordered_columns = ['game', 'tournament', 'bet_amount', 'odds', 'win_loss_code', 'win_loss_amount', 'bet_with', 'bet_against']
+    ordered_columns = ['game', 'tournament', 'bet_amount', 'odds', 'win_loss_code', 'win_loss_amount', 'bet_with', 'bet_against', 'bet_date']
     bet_df = bet_df[ordered_columns]
     bet_df['win_loss_amount'] = bet_df['win_loss_amount'].astype(float)
     bet_df['bet_amount'] = bet_df['bet_amount'].astype(float)
+    bet_df['bet_date'] = pd.to_datetime(bet_df['bet_date'])
     bet_df = bet_df.sort_values(by='win_loss_code', ascending=False)
 
     st.title('Betting Performance')
@@ -94,6 +94,12 @@ def app():
 
     st.plotly_chart(fig)
 
+    # Line chart for win_loss_amount over time
+    st.title('Win/Loss Amount Over Time')
+    grouped_df = bet_df.groupby(['game', 'tournament', 'bet_date'])['win_loss_amount'].sum().reset_index()
+    line_fig = px.line(grouped_df, x='bet_date', y='win_loss_amount', color='tournament', title='Win/Loss Amount Over Time per Tournament', markers=True)
+    st.plotly_chart(line_fig)
+
     # Simulation
     unique_odds = odds_win_rate_df['odds_str'].unique()
     all_combinations = []
@@ -151,6 +157,7 @@ def app():
         summary_df_final['loss_amount'] = 0
         
     summary_df_final['net_profit'] = summary_df_final['win_amount'] + summary_df_final['loss_amount']
+    summary_df_final = summary_df_final.sort_values(by=['net_profit'], ascending=False)
     st.dataframe(summary_df_final)
 
     # Bet history details table

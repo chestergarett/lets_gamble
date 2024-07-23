@@ -18,6 +18,7 @@ def run_job_pipeline(code):
         upload_offline_to_firebase(bet_df, 'bet')
         upload_offline_to_firebase(pred_df, 'pred')
     if code==1:
+        upload_offline_to_firebase(bet_df, 'bet')
         save_offline_firebase_logs()
     if code==2:
         scrape_matches_completed_winners()
@@ -32,8 +33,8 @@ def run_job_pipeline(code):
         upload_offline_to_firebase(pred_df, 'pred')
         upload_offline_to_firebase(match_odds_df, 'match_odds')
     if code==7:
-        scrape_matches_completed_winners()
+        # scrape_matches_completed_winners()
         save_offline_firebase_logs()
 
 
-run_job_pipeline(1)
+run_job_pipeline(7)
