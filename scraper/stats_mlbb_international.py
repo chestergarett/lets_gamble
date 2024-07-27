@@ -147,17 +147,13 @@ def get_country_head_to_head(csv):
     grouped_df.to_csv(r'files/mlbb/MSC/aggregates/country_matchup.csv')
 
 ### scrape per year MSC results
-# years = [2023,2022,2021, 2019, 2018]
-# loop_per_year_then_scrape(years)
+years = [2024]
+loop_per_year_then_scrape(years)
 
 #### contenate per year stats into one dataframe
-# folder_path = r'files/mlbb/MSC/'
-# concatenate_dfs(folder_path)
+folder_path = r'files/mlbb/MSC/'
+concatenate_dfs(folder_path)
 
 ### country head to head matchups
 concatenated_csv = r'files/mlbb/MSC/all_years.csv'
 get_country_head_to_head(concatenated_csv)
-
-# create xgboost model to predict who will win match based on stats
-# create pytorch ANN model to predict who will win match based on stats
-# compare results

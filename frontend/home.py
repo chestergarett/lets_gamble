@@ -6,25 +6,25 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from jobs.get_all_firebase_data import load_offline_df
 
 
-bet_df = load_offline_df('bet_logs')
-bet_df['win_loss_amount'] = bet_df['win_loss_amount'].astype(float)
-bet_df['bet_amount'] = bet_df['bet_amount'].astype(float)
-total_wins = bet_df[bet_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
-total_bet_amounts = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
-total_matches = len(bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])])
-profit = (total_wins) / total_bet_amounts - 1
-
-profit_per_game = {}
-
-for game in bet_df['game'].unique():
-    game_df = bet_df[bet_df['game'] == game]
-    game_wins = game_df[game_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
-    game_bet_amounts = game_df[game_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
-    if game_bet_amounts > 0:
-        game_profit = (game_wins / game_bet_amounts) - 1
-        profit_per_game[game] = f'{game_profit * 100:.2f}%'
-
 def app():
+    bet_df = load_offline_df('bet_logs')
+    bet_df['win_loss_amount'] = bet_df['win_loss_amount'].astype(float)
+    bet_df['bet_amount'] = bet_df['bet_amount'].astype(float)
+    total_wins = bet_df[bet_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
+    total_bet_amounts = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
+    total_matches = len(bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])])
+    profit = (total_wins - total_bet_amounts) / total_bet_amounts
+
+    profit_per_game = {}
+
+    for game in bet_df['game'].unique():
+        game_df = bet_df[bet_df['game'] == game]
+        game_wins = game_df[game_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
+        game_bet_amounts = game_df[game_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
+        if game_bet_amounts > 0:
+            game_profit = ((game_wins-game_bet_amounts) / game_bet_amounts)
+            profit_per_game[game] = f'{game_profit * 100:.2f}%'
+
     st.markdown(
         """
         <style>

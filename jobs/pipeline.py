@@ -37,4 +37,4 @@ def run_job_pipeline(code):
         save_offline_firebase_logs()
 
 
-run_job_pipeline(7)
+run_job_pipeline(1)

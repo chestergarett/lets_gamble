@@ -140,7 +140,7 @@ def run_training_pipeline(training_file_folder):
     train_model_ann(X_train,X_test, y_train, y_test)
 
 #### pipeline ###
-start_train_model = False
+start_train_model = True
 test_inference = False
 
 if start_train_model:

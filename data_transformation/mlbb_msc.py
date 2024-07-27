@@ -77,5 +77,5 @@ def run_transformation_pipeline(csv):
     df = pd.read_csv(r'files/mlbb/MSC/model_usage/msc_input_model_data.csv')
     do_feature_engineering(df)
 
-# csv = r'files/mlbb/MSC/all_years.csv'
-# run_transformation_pipeline(csv)
+csv = r'files/mlbb/MSC/all_years.csv'
+run_transformation_pipeline(csv)

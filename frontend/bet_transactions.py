@@ -63,9 +63,10 @@ def app():
 
         st.plotly_chart(bar_fig)
     
+    bet_df['net_gain_loss'] = bet_df['win_loss_amount'] - bet_df['bet_amount']
     total_wins = bet_df[bet_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
     total_bet_amounts = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
-    percentage_gain = (total_wins) / total_bet_amounts - 1
+    percentage_gain = (total_wins-total_bet_amounts) / total_bet_amounts
 
     if percentage_gain >= 0:
         st.markdown(f"<div style='font-weight: bold'>% Gain: </div> <div style='text-align: center; color:green; font-size: 24px'>{percentage_gain:.2%}</div>", unsafe_allow_html=True)

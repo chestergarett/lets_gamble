@@ -158,10 +158,11 @@ def check_if_update_needed(doc_id,row):
     collection_ref = db.collection('bet-log')
     doc = collection_ref.document(doc_id)
     doc_dict = doc.get().to_dict()
-    if ('win_loss_code' not in doc_dict) or ('win_loss_amount' not in doc_dict) or (doc_dict['win_loss_code']!=row['win_loss_code']) or (doc_dict['win_loss_amount'] != row['win_loss_amount']) or (doc_dict['tournament'] != row['tournament']) or (doc_dict['game'] != row['game']):
+    if ('win_loss_code' not in doc_dict) or ('win_loss_amount' not in doc_dict) or (doc_dict['win_loss_code']!=row['win_loss_code']) or (doc_dict['win_loss_amount'] != row['win_loss_amount']) or (doc_dict['tournament'] != row['tournament']) or (doc_dict['game'] != row['game']) or (doc_dict['bet_date'] != row['bet_date']):
         update = {'win_loss_code': row['win_loss_code'], 
                   'win_loss_amount': row['win_loss_amount'], 
                   'tournament': row['tournament'], 
+                  'bet_date': row['bet_date'],
                   'game': row['game']}
         
         print(update)
