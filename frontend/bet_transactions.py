@@ -15,6 +15,14 @@ def simulate_bet(odds_list, df):
     total_capital_expended = filtered_df['bet_amount'].sum()
     return total_win_loss_amount,total_capital_expended
 
+def calculate_net_gain_loss(row):
+    if row['win_loss_code'] == 'WIN':
+        return row['win_loss_amount'] - row['bet_amount']
+    elif row['win_loss_code'] == 'LOSS':
+        return row['win_loss_amount']
+    else:
+        return row['win_loss_amount'] - row['bet_amount']
+    
 def app():
     bet_df = load_offline_df('bet_logs')
     ordered_columns = ['game', 'tournament', 'bet_amount', 'odds', 'win_loss_code', 'win_loss_amount', 'bet_with', 'bet_against', 'bet_date']
@@ -63,15 +71,17 @@ def app():
 
         st.plotly_chart(bar_fig)
     
-    bet_df['net_gain_loss'] = bet_df['win_loss_amount'] - bet_df['bet_amount']
+    bet_df['net_gain_loss'] = bet_df.apply(calculate_net_gain_loss, axis=1)
     total_wins = bet_df[bet_df['win_loss_code'] == 'WIN']['win_loss_amount'].sum()
     total_bet_amounts = bet_df[bet_df['win_loss_code'].isin(['WIN', 'LOSS'])]['bet_amount'].sum()
     percentage_gain = (total_wins-total_bet_amounts) / total_bet_amounts
 
     if percentage_gain >= 0:
         st.markdown(f"<div style='font-weight: bold'>% Gain: </div> <div style='text-align: center; color:green; font-size: 24px'>{percentage_gain:.2%}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight: bold'>Total Wins: </div> <div style='text-align: center; color:green; font-size: 24px'>{round(total_wins,2)}</div><div style='font-weight: bold'>Total Bets: </div> <div style='text-align: center; color:green; font-size: 24px'>{total_bet_amounts}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div style='font-weight: bold'>% Loss: </div> <div style='text-align: center; color:red; font-size: 24px'>{percentage_gain:.2%}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='font-weight: bold'>Total Wins: </div> <div style='text-align: center; color:green; font-size: 24px'>{round(total_wins,2)}</div><div style='font-weight: bold'>Total Bets: </div> <div style='text-align: center; color:green; font-size: 24px'>{total_bet_amounts}</div>", unsafe_allow_html=True)
 
     # Analysis
     st.title('Post Bet Analysis')

@@ -109,8 +109,8 @@ def run_sample_inference(inference_file_path, df):
 
 
 #### pipeline ###
-start_train_model = True
-test_inference = True
+start_train_model = False
+test_inference = False
 
 if start_train_model:
     training_file_folder = r'files/mlbb/MSC/model_usage'
