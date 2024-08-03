@@ -38,10 +38,9 @@ def clean_mlbb_msc_dataset(csv, country):
     df_augmented.to_csv(f'files/mlbb/MPL/{country}/model_usage/mpl_input_model_data.csv', index=False)
 
 def do_feature_engineering(df):
-    X = df.drop(['team1', 'team2', 'outcome'], axis=1)
-    y = df['outcome']
-    X = pd.get_dummies(X, columns=['team1_country', 'team2_country', 'tournament'])
-    X = X.astype(int)
+    df = df[(df['team2_score']<3) & (df['team1_score']<3)]
+    X = df.drop(['team1', 'team2', 'team1_score', 'team2_score'], axis=1)
+    y = df[['team1_score', 'team2_score']]
     label_encoder = LabelEncoder()
     X['year'] = label_encoder.fit_transform(X['year'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -50,23 +49,24 @@ def do_feature_engineering(df):
     X_train[numeric_cols] = scaler.fit_transform(X_train[numeric_cols])
     X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
 
-    X_train.to_csv(r'files/mlbb/MSC/model_usage/X_train.csv',index=False)
-    X_test.to_csv(r'files/mlbb/MSC/model_usage/X_test.csv',index=False)
-    y_train.to_csv(r'files/mlbb/MSC/model_usage/y_train.csv',index=False)
-    y_test.to_csv(r'files/mlbb/MSC/model_usage/y_test.csv',index=False)
+    filepath = r'files/mlbb/MPL/Philippines'
+    X_train.to_csv(f'{filepath}/model_usage/X_train.csv',index=False)
+    X_test.to_csv(f'{filepath}/model_usage/X_test.csv',index=False)
+    y_train.to_csv(f'{filepath}/model_usage/y_train.csv',index=False)
+    y_test.to_csv(f'{filepath}/model_usage/y_test.csv',index=False)
 
-    with open(r'pickles/mlbb_international_label_encoder.pkl', 'wb') as f:
+    with open(r'pickles/mplph_label_encoder.pkl', 'wb') as f:
         pickle.dump(label_encoder, f)
 
-    with open(r'pickles/mlbb_international_scaler.pkl', 'wb') as f:
+    with open(r'pickles/mplph_scaler.pkl', 'wb') as f:
         pickle.dump(scaler, f)
 
     print('Exported training and testing files')
 
 def run_transformation_pipeline(csv,country):
-    clean_mlbb_msc_dataset(csv,country)
-    # df = pd.read_csv(r'files/mlbb/MSC/model_usage/msc_input_model_data.csv')
-    # do_feature_engineering(df)
+    # clean_mlbb_msc_dataset(csv,country)
+    df = pd.read_csv(r'files/mlbb/MPL/Philippines/model_usage/mpl_input_model_data.csv')
+    do_feature_engineering(df)
 
 csv = r'files/mlbb/MPL/Philippines/all_seasons.csv'
 country = 'Philippines'
