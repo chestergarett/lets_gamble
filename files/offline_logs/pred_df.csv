@@ -1,0 +1,27 @@
+id,year,team2_group_rank,model,team2,team1_country,predicted_winner,team2_group_loss,tournament,team1_group_loss,team1_group_win,team2_group_win,team1,team2_country,team1_group_rank,actual_winner
+0FRE73FPeRFpW6mbRYEs,2024,2,XgBoost,Fire Flux Esports,Malaysia,Selangor Red Giants,2,MSC,1,5,4,Selangor Red Giants,Turkey,1,Selangor Red Giants
+6vcQSYNGP2kNik8K8Rzr,2024,2,ANN,Fire Flux Esports,Malaysia,Selangor Red Giants,2,MSC,1,5,4,Selangor Red Giants,Turkey,1,Selangor Red Giants
+7OD52YvHHZvxpK87p9qb,2024,1,XgBoost,NIP Flash,Malaysia,HomeBois,1,MSC,2,4,5,HomeBois,Singapore,2,NIP Flash
+Br9hdtl3Jhtd1VGhP6dX,2024,1,ANN,Liquid Echo,Philippines,Falcons AP Bren,0,MSC,0,6,6,Falcons AP Bren,Philippines,1,Falcons AP Bren
+HAXCQ1UMKlzsHdJlsyLE,2024,2,ANN,See You Soon,Philippines,Falcons AP.Bren,2,MSC,0,6,4,Falcons AP.Bren,Myanmar,1,Falcons AP.Bren
+Hbs2AUjWxk8n5BHY5U1r,2024,3,XgBoost,NIP Flash,Philippines,NIP Flash,6,Other,3,8,7,Falcons AP.Bren,Singapore,2,Falcons AP.Bren
+IgDjtf6sWS5Hjx9JmM0p,2024,1,XgBoost,SRG,Philippines,SRG,2,Other,3,10,10,Liquid Echo,Malaysia,1,Liquid Echo
+J6Fn7NbDOYjHuf8hG0gY,2024,3,ANN,Fnatic Onic,Malaysia,Fnatic Onic,5,Other,6,7,7,HomeBois,Indonesia,2,Fnatic Onic
+KW12uCKfyLyNiMKuLR79,2024,1,XgBoost,Fnatic Onic,Philippines,Liquid Echo,5,MSC,3,10,7,Liquid Echo,Indonesia,1,Liquid Echo
+OXeZGiG6jXWB67xYMLfo,2024,3,XgBoost,Fnatic Onic,Malaysia,Fnatic Onic,5,Other,6,7,7,HomeBois,Indonesia,2,Fnatic Onic
+PehDn2DThwZNKqK7Xbnq,2024,2,XgBoost,Falcon Esports,Philippines,Liquid Echo,2,MSC,0,6,4,Liquid Echo,Myanmar,1,Liquid Echo
+R6BWM2HmXrhLSgAzWt3m,2024,3,ANN,NIP Flash,Philippines,Falcons AP.Bren,6,Other,3,8,7,Falcons AP.Bren,Singapore,2,Falcons AP.Bren
+RY1UX0NpR68kqvKh00Cl,2024,2,XgBoost,See You Soon,Philippines,Falcons AP.Bren,2,MSC,0,6,4,Falcons AP.Bren,Myanmar,1,Falcons AP.Bren
+VjbCHpHhlODxGZrkC7P0,2024,2,XgBoost,Falcons AP.Bren,Malaysia,SRG,3,Other,2,10,8,SRG,Philippines,1,SRG
+bMGSZ1JCCy5KcrkK3Rli,2024,2,ANN,Falcons AP.Bren,Malaysia,SRG,3,Other,2,10,8,SRG,Philippines,1,SRG
+bMWrHBjTUEX5bnm62eDa,2024,1,XgBoost,Liquid Echo,Philippines,Falcons AP Bren,0,MSC,0,6,6,Falcons AP Bren,Philippines,1,Falcons AP Bren
+gD4aFlPwxz67waZ4UPsy,2024,1,ANN,NIP Flash,Malaysia,NIP Flash,1,MSC,2,4,5,HomeBois,Singapore,2,NIP Flash
+gMNiiDUQmnpqMlqQ3pNz,2024,1,XgBoost,NIP Flash,Malaysia,Selangor Red Giants,1,MSC,1,5,5,Selangor Red Giants,Singapore,1,Selangor Red Giants
+jJvCDwOCkPsfgQxwsv6l,2024,2,XgBoost,Falcons AP.Bren,Indonesia,Falcons AP.Bren,3,Other,5,7,8,Fnatic Onic,Philippines,3,Falcons AP.Bren
+mGuDD8Tpye6IgmX263D3,2024,1,ANN,SRG,Philippines,Liquid Echo,2,Other,3,10,10,Liquid Echo,Malaysia,1,
+oHxQbHgrn34jtwP9s2zn,2024,2,ANN,Falcon Esports,Philippines,Liquid Echo,2,MSC,0,6,4,Liquid Echo,Myanmar,1,Liquid Echo
+q81xCSDUmdvlHs15R7F3,2024,1,ANN,NIP Flash,Malaysia,Selangor Red Giants,1,MSC,1,5,5,Selangor Red Giants,Singapore,1,Selangor Red Giants
+tsKNq8bvELu9NgDXegER,2024,1,ANN,Falcons AP Bren,Malaysia,Falcons AP Bren,0,MSC,1,5,6,Selangor Red Giants,Philippines,1,Selangor Red Giants
+vGV48DeOkZWXIKB8lyM3,2024,1,XgBoost,Falcons AP Bren,Malaysia,Falcons AP Bren,0,MSC,1,5,6,Selangor Red Giants,Philippines,1,Selangor Red Giants
+wKj0jsZaySMwTyxFlpGD,2024,1,ANN,Fnatic Onic,Philippines,Liquid Echo,5,MSC,3,10,7,Liquid Echo,Indonesia,1,Liquid Echo
+yugjBw2nPlX9ZaTW8WvR,2024,2,ANN,Falcons AP.Bren,Indonesia,Falcons AP.Bren,3,Other,5,7,8,Fnatic Onic,Philippines,3,Falcons AP.Bren
