@@ -10,3 +10,4 @@ shap==0.45.1
 firebase-admin==6.5.0
 python-dotenv==1.0.1
 beautifulsoup4==4.12.3
+xgboost==2.1.0
