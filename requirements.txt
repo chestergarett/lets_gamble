@@ -1,4 +1,12 @@
-pandas
-numpy
-streamlit
-plotly
+pandas==2.2.2
+numpy==1.26.4
+streamlit==1.36.0
+plotly==5.22.0
+scikit-learn==1.5.0
+torch==2.3.1
+torchaudio==2.3.1
+torchvision==0.18.1
+shap==0.45.1
+firebase-admin==6.5.0
+python-dotenv==1.0.1
+beautifulsoup4==4.12.3
