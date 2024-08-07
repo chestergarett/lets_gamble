@@ -48,6 +48,7 @@ def app():
     )
 
     st.title('Holy Grail of Sports Betting')
+    st.write('### Authored by: Chester Garett Calingacion')
     st.write('### Page last updated on: Aug 4, 2024')
     st.write('### **Introduction**')
     st.write(f'''<div class='justified-text'>
