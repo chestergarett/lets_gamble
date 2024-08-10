@@ -33,14 +33,16 @@ def clean_mlbb_msc_dataset(csv, country):
     df_swapped[['team1_game_losses', 'team2_game_losses']] = df[['team2_game_losses', 'team1_game_losses']].values
 
     df_augmented = pd.concat([df, df_swapped], ignore_index=True)
+    df_augmented['winner'] = df_augmented.apply(lambda row: 1 if row['team1_score'] > row['team2_score'] else 0, axis=1)
     df_augmented = df_augmented.sort_values(['match_date'])
-    df_augmented = df.drop(['match_date', 'Unnamed: 0'],axis=1)
+    df_augmented = df_augmented.drop(['match_date', 'Unnamed: 0'],axis=1)
+    print(df_augmented.columns)
     df_augmented.to_csv(f'files/mlbb/MPL/{country}/model_usage/mpl_input_model_data.csv', index=False)
 
 def do_feature_engineering(df):
     df = df[(df['team2_score']<3) & (df['team1_score']<3)]
-    X = df.drop(['team1', 'team2', 'team1_score', 'team2_score'], axis=1)
-    y = df[['team1_score', 'team2_score']]
+    X = df.drop(['team1', 'team2', 'team1_score', 'team2_score','winner'], axis=1)
+    y = df[['team1_score', 'team2_score', 'winner']]
     label_encoder = LabelEncoder()
     X['year'] = label_encoder.fit_transform(X['year'])
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
@@ -64,7 +66,7 @@ def do_feature_engineering(df):
     print('Exported training and testing files')
 
 def run_transformation_pipeline(csv,country):
-    # clean_mlbb_msc_dataset(csv,country)
+    clean_mlbb_msc_dataset(csv,country)
     df = pd.read_csv(r'files/mlbb/MPL/Philippines/model_usage/mpl_input_model_data.csv')
     do_feature_engineering(df)
 
