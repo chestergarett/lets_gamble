@@ -55,11 +55,7 @@ class TransformerWinner(nn.Module):
         
     def forward(self, x):
         # Input embedding
-        x = self.embedding(x)
-        
-        # Positional encoding (optional, but common in Transformer models)
-        x = x.permute(1, 0, 2)  # Transformer expects [sequence length, batch size, embedding size]
-        
+        x = self.embedding(x).unsqueeze(0)
         # Transformer encoder
         x = self.transformer_encoder(x)
         x = x.mean(dim=0)  # Average over sequence length
@@ -109,7 +105,7 @@ def train_score_model_ann(X_train, X_test, y_train, y_test, epochs=200, batch_si
     
     return model
 
-def train_winner_model_transformer(X_train, X_test, y_train, y_test, epochs=200, batch_size=10):
+def train_winner_model_transformer(X_train, X_test, y_train, y_test, country, epochs=200, batch_size=10):
     # Convert data to tensors
     X_train_tensor = torch.tensor(X_train.values, dtype=torch.float32)
     X_test_tensor = torch.tensor(X_test.values, dtype=torch.float32)
@@ -127,7 +123,7 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, epochs=200,
         optimizer.zero_grad()
 
         # Transformer model expects input shape [sequence length, batch size, feature size]
-        outputs = model(X_train_tensor.unsqueeze(0))  # Add a sequence length dimension
+        outputs = model(X_train_tensor)  # Add a sequence length dimension
         loss = criterion(outputs, y_train_tensor)
         loss.backward()
         optimizer.step()
@@ -135,12 +131,12 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, epochs=200,
         if (epoch + 1) % 10 == 0:
             print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}')
 
-    torch.save(model.state_dict(), 'mlbb_transformer_winner_model.pth')
+    torch.save(model.state_dict(), f'pickles/mpl/{country}/mlbb_model_transformer.pth')
 
     # Evaluation
     model.eval()
     with torch.no_grad():
-        outputs = model(X_test_tensor.unsqueeze(0))  # Add a sequence length dimension
+        outputs = model(X_test_tensor)  # Add a sequence length dimension
         predicted = (outputs >= 0.5).float()  # Convert probabilities to binary predictions
     
     accuracy = accuracy_score(y_test_tensor, predicted)
@@ -148,14 +144,14 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, epochs=200,
     
     return model
 
-def run_training_pipeline(training_file_folder):
+def run_training_pipeline(training_file_folder,country):
     X_train = pd.read_csv(f'{training_file_folder}/X_train.csv')
     X_test = pd.read_csv(f'{training_file_folder}/X_test.csv')
     y_train = pd.read_csv(f'{training_file_folder}/y_train.csv')
     y_test = pd.read_csv(f'{training_file_folder}/y_test.csv')
     # train_score_model_ann(X_train,X_test, y_train, y_test)
-    train_winner_model_transformer(X_train,X_test, y_train, y_test)
+    train_winner_model_transformer(X_train,X_test, y_train, y_test,country)
 
 country = 'Philippines'
 training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-run_training_pipeline(training_file_folder)
+run_training_pipeline(training_file_folder,country)

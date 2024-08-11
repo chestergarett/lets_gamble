@@ -36,10 +36,10 @@ def train_model(X_train,X_test, y_train, y_test,country):
     shap_values = explainer(X_test)
 
     # Save model and SHAP explainer to pickle files
-    with open(f'pickles/mpl/{country}/mlbb_local_model.pkl', 'wb') as f:
+    with open(f'pickles/mpl/{country}/mlbb_model_xgboost.pkl', 'wb') as f:
         pickle.dump(model, f)
 
-    with open(f'pickles/mpl/{country}/mlbb_local_explainer.pkl', 'wb') as f:
+    with open(f'pickles/mpl/{country}/mlbb_explainer_xgboost.pkl', 'wb') as f:
         pickle.dump(explainer, f)
 
     print("Model and SHAP explainer saved as pickle files.")
