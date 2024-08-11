@@ -152,6 +152,6 @@ def run_training_pipeline(training_file_folder,country):
     # train_score_model_ann(X_train,X_test, y_train, y_test)
     train_winner_model_transformer(X_train,X_test, y_train, y_test,country)
 
-country = 'Philippines'
+country = 'Indonesia'
 training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
 run_training_pipeline(training_file_folder,country)

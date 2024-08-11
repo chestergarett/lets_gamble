@@ -127,9 +127,9 @@ def concat_all_df(folder_path):
     combined_df.to_csv(f'{folder_path}/all_seasons.csv')
 
 base_url = 'https://liquipedia.net/mobilelegends/MPL'
-country = 'Philippines'
-seasons = [7,6,5,4,3,2,1]
-folder_path = f'files/mlbb/MPL/Philippines'
+country = 'Indonesia'
+seasons = [13,12,11,10,9,8,7,6,5,4,3,2,1]
+folder_path = f'files/mlbb/MPL/Indonesia'
 
-# scrape_per_year(base_url,country,seasons)
+scrape_per_year(base_url,country,seasons)
 concat_all_df(folder_path)

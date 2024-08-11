@@ -112,8 +112,8 @@ start_train_model = True
 test_inference = False
 
 if start_train_model:
-    training_file_folder = r'files/mlbb/MPL/Philippines/model_usage'
-    country = 'Philippines'
+    country = 'Indonesia'
+    training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
     run_training_pipeline(training_file_folder,country)
 
 if test_inference:

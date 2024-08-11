@@ -39,7 +39,7 @@ def clean_mlbb_msc_dataset(csv, country):
     print(df_augmented.columns)
     df_augmented.to_csv(f'files/mlbb/MPL/{country}/model_usage/mpl_input_model_data.csv', index=False)
 
-def do_feature_engineering(df):
+def do_feature_engineering(df,country):
     df = df[(df['team2_score']<3) & (df['team1_score']<3)]
     X = df.drop(['team1', 'team2', 'team1_score', 'team2_score','winner'], axis=1)
     y = df[['team1_score', 'team2_score', 'winner']]
@@ -51,25 +51,25 @@ def do_feature_engineering(df):
     X_train[numeric_cols] = scaler.fit_transform(X_train[numeric_cols])
     X_test[numeric_cols] = scaler.transform(X_test[numeric_cols])
 
-    filepath = r'files/mlbb/MPL/Philippines'
-    X_train.to_csv(f'{filepath}/model_usage/X_train.csv',index=False)
-    X_test.to_csv(f'{filepath}/model_usage/X_test.csv',index=False)
-    y_train.to_csv(f'{filepath}/model_usage/y_train.csv',index=False)
-    y_test.to_csv(f'{filepath}/model_usage/y_test.csv',index=False)
+    filepath = r'files/mlbb/MPL'
+    X_train.to_csv(f'{filepath}/{country}/model_usage/X_train.csv',index=False)
+    X_test.to_csv(f'{filepath}/{country}/model_usage/X_test.csv',index=False)
+    y_train.to_csv(f'{filepath}/{country}/model_usage/y_train.csv',index=False)
+    y_test.to_csv(f'{filepath}/{country}/model_usage/y_test.csv',index=False)
 
-    with open(r'pickles/mplph_label_encoder.pkl', 'wb') as f:
+    with open(f'pickles/mpl/{country}/mpl_label_encoder.pkl', 'wb') as f:
         pickle.dump(label_encoder, f)
 
-    with open(r'pickles/mplph_scaler.pkl', 'wb') as f:
+    with open(f'pickles/mpl/{country}/mpl_scaler.pkl', 'wb') as f:
         pickle.dump(scaler, f)
 
     print('Exported training and testing files')
 
 def run_transformation_pipeline(csv,country):
     clean_mlbb_msc_dataset(csv,country)
-    df = pd.read_csv(r'files/mlbb/MPL/Philippines/model_usage/mpl_input_model_data.csv')
-    do_feature_engineering(df)
+    df = pd.read_csv(f'files/mlbb/MPL/{country}/model_usage/mpl_input_model_data.csv')
+    do_feature_engineering(df,country)
 
-csv = r'files/mlbb/MPL/Philippines/all_seasons.csv'
-country = 'Philippines'
+country = 'Indonesia'
+csv = f'files/mlbb/MPL/{country}/all_seasons.csv'
 run_transformation_pipeline(csv,country)
