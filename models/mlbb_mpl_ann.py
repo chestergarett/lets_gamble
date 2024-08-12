@@ -140,6 +140,7 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, country, ep
         predicted = (outputs >= 0.5).float()  # Convert probabilities to binary predictions
     
     accuracy = accuracy_score(y_test_tensor, predicted)
+    print('predicted', predicted)
     print(f'Accuracy for winning team: {accuracy:.4f}')
     
     return model
@@ -152,6 +153,68 @@ def run_training_pipeline(training_file_folder,country):
     # train_score_model_ann(X_train,X_test, y_train, y_test)
     train_winner_model_transformer(X_train,X_test, y_train, y_test,country)
 
-country = 'Indonesia'
-training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-run_training_pipeline(training_file_folder,country)
+def get_sample_data(df):
+    sample = df.sample()
+    return sample
+
+def run_sampling_for_inference(inference_file_folder):
+    X_test = pd.read_csv(f'{inference_file_folder}/inference_samples.csv')
+    X_test = X_test.drop('Unnamed: 0', axis=1)
+    sample_df = get_sample_data(X_test)
+    return sample_df
+
+def load_inference_artifacts_ann(filepath):
+    trained_model = f'{filepath}/mlbb_model_transformer.pth'
+
+    with open(f'{filepath}/mpl_label_encoder.pkl', 'rb') as f:
+        label_encoder = pickle.load(f)
+    
+    with open(f'{filepath}/mpl_scaler.pkl', 'rb') as f:
+        scaler = pickle.load(f)
+        
+    return trained_model,label_encoder,scaler
+
+def predict_winner(trained_model_config,label_encoder,scaler, df):
+    # df['year'] = label_encoder.transform(df['year'])
+    numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    # numeric_cols = numeric_cols.drop(['year'])
+    df[numeric_cols] = scaler.transform(df[numeric_cols])
+    features = torch.tensor(df.values, dtype=torch.float32)
+    
+    model = TransformerWinner(features.shape[1])
+    model.load_state_dict(torch.load(trained_model_config))
+    model.eval()
+    with torch.no_grad():
+        predictions = model(features).numpy()
+    predictions = (predictions > 0.5).astype(int).flatten()
+
+    results = []
+    for i in range(len(predictions)):
+        prediction_result = {
+            'prediction': int(predictions[i]),
+            'features': features
+        }
+        results.append(prediction_result)
+    
+    return results
+
+def run_sample_inference(inference_file_path, df):
+    trained_model,label_encoder,scaler = load_inference_artifacts_ann(inference_file_path)
+    prediction = predict_winner(trained_model,label_encoder,scaler, df)
+    print(prediction)
+
+#### pipeline ###
+start_train_model = False
+test_inference = False
+
+if start_train_model:
+    country = 'Indonesia'
+    training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+    run_training_pipeline(training_file_folder,country)
+
+if test_inference:
+    country = 'Indonesia'
+    inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+    sample_df = run_sampling_for_inference(inference_file_folder)
+    inference_file_path = f'pickles/mpl/{country}'
+    run_sample_inference(inference_file_path, sample_df)

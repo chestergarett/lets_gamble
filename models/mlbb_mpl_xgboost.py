@@ -45,39 +45,33 @@ def train_model(X_train,X_test, y_train, y_test,country):
     print("Model and SHAP explainer saved as pickle files.")
 
 def load_inference_artifacts(filepath):
-    with open(f'{filepath}/mlbb_local_model.pkl', 'rb') as f:
+    with open(f'{filepath}/mlbb_model_xgboost.pkl', 'rb') as f:
         trained_model = pickle.load(f)
 
-    with open(f'{filepath}/mlbb_local_label_encoder.pkl', 'rb') as f:
+    with open(f'{filepath}/mpl_label_encoder.pkl', 'rb') as f:
         label_encoder = pickle.load(f)
     
-    with open(f'{filepath}/mlbb_local_scaler.pkl', 'rb') as f:
+    with open(f'{filepath}/mpl_scaler.pkl', 'rb') as f:
         scaler = pickle.load(f)
     
-    with open(f'{filepath}/mlbb_local_explainer.pkl', 'rb') as f:
-        explainer = pickle.load(f)
-    
-    return trained_model,label_encoder,scaler,explainer
+    return trained_model,label_encoder,scaler
 
 def get_sample_data(df):
     sample = df.sample()
     return sample
 
-def predict(trained_model,label_encoder,scaler,explainer, df):
-    df['year'] = label_encoder.fit_transform(df['year'])
+def predict(trained_model,label_encoder,scaler, df):
+    # df['year'] = label_encoder.transform(df['year'])
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
+    # numeric_cols = numeric_cols.drop(['year'])
     df[numeric_cols] = scaler.transform(df[numeric_cols])
     features = df.values
     predictions = trained_model.predict(features)
-    shap_values = explainer(features)
-
     results = []
     for i in range(len(predictions)):
-        explanation = dict(zip(df.columns, shap_values[i].values))
-        top_3_explanation = dict(sorted(explanation.items(), key=lambda item: abs(item[1]), reverse=True)[:3])
         prediction_result = {
             'prediction': int(predictions[i]),
-            'explanation': top_3_explanation
+            'features': features
         }
         results.append(prediction_result)
     
@@ -97,18 +91,20 @@ def run_training_pipeline(training_file_folder,country):
 
 ### getting samples to test for inference
 def run_sampling_for_inference(inference_file_folder):
-    X_test = pd.read_csv(f'{inference_file_folder}/X_test.csv')
+    X_test = pd.read_csv(f'{inference_file_folder}/inference_samples.csv')
+    X_test = X_test.drop('Unnamed: 0', axis=1)
     sample_df = get_sample_data(X_test)
     return sample_df
 
 ### inference for predicting results
 def run_sample_inference(inference_file_path, df):
-    trained_model,label_encoder,scaler,explainer = load_inference_artifacts(inference_file_path)
-    predict(trained_model,label_encoder,scaler,explainer, df)
+    trained_model,label_encoder,scaler = load_inference_artifacts(inference_file_path)
+    prediction = predict(trained_model,label_encoder,scaler, df)
+    return prediction
 
 
 #### pipeline ###
-start_train_model = True
+start_train_model = False
 test_inference = False
 
 if start_train_model:
@@ -117,8 +113,10 @@ if start_train_model:
     run_training_pipeline(training_file_folder,country)
 
 if test_inference:
-    inference_file_folder = r'files/mlbb/MSC/model_usage'
+    country = 'Indonesia'
+    inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
     sample_df = run_sampling_for_inference(inference_file_folder)
-    inference_file_path = r'pickles/'
-    run_sample_inference(inference_file_path, sample_df)
+    inference_file_path = f'pickles/mpl/{country}'
+    prediction = run_sample_inference(inference_file_path, sample_df)
+    print(prediction)
 
