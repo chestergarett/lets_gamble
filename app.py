@@ -10,7 +10,7 @@ pages = {
     "MLBB International A/B Tests": mlbb_model_ab_test,
     "MLBB International Predict Winner": mlbb_predict_winner,
     "MLBB International Stats": mlbb_msc_stats,
-    "MLBB Local Predict Winner": mlbb_predict_winner_mpl
+    # "MLBB Local Predict Winner": mlbb_predict_winner_mpl
 }
 
 st.sidebar.title('Navigation')

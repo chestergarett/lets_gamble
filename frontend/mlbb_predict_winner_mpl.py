@@ -8,39 +8,8 @@ import plotly.express as px
 import torch
 import torch.nn as nn
 import torch.optim as optim
-
-
-class TransformerWinner(nn.Module):
-    def __init__(self, input_size, d_model=128, num_heads=4, num_layers=2, dim_feedforward=512, dropout=0.3):
-        super(TransformerWinner, self).__init__()
-        
-        # Embedding layer to project input features to d_model dimensions
-        self.embedding = nn.Linear(input_size, d_model)
-        
-        # Transformer encoder layer
-        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=num_heads, dim_feedforward=dim_feedforward, dropout=dropout)
-        self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
-        
-        # Fully connected output layer
-        self.fc_out = nn.Sequential(
-            nn.Linear(d_model, 64),
-            nn.ReLU(),
-            nn.Dropout(dropout),
-            nn.Linear(64, 1),
-            nn.Sigmoid()
-        )
-        
-    def forward(self, x):
-        # Input embedding
-        x = self.embedding(x).unsqueeze(0)
-        # Transformer encoder
-        x = self.transformer_encoder(x)
-        x = x.mean(dim=0)  # Average over sequence length
-        
-        # Fully connected output
-        x = self.fc_out(x)
-        return x
-        
+import time
+          
 def app():
     st.title('MLBB Predict Winner')
 
@@ -96,8 +65,8 @@ def app():
     country = 'Indonesia'
     inference_file_path = f'pickles/mpl/{country}'
     trained_model, label_encoder, scaler = load_inference_artifacts(inference_file_path)
-    trained_model_state_dict, label_encoder, scaler = load_inference_artifacts_ann(inference_file_path)
-
+    trained_model_config, label_encoder, scaler = load_inference_artifacts_ann(inference_file_path)
+    
     with col1:
         if st.button("Predict via XgBoost"):
             st.session_state.prediction_made = True
@@ -139,8 +108,8 @@ def app():
             st.session_state.prediction_model = 'ANN'
             X_column_dict = read_X_train_cols(country)
             for_prediction_features = match_entry_data(entered_data, X_column_dict)
-            trained_model = TransformerWinner(for_prediction_features.shape[1])
-            prediction_results = predict_winner(trained_model, label_encoder, scaler, for_prediction_features)
+            print('before state dict',for_prediction_features)
+            prediction_results = predict_winner(trained_model_config,label_encoder,scaler, for_prediction_features)
             st.session_state.predicted_winner = entered_data['team1'] if prediction_results[0]['prediction'] == 1 else entered_data['team2']
             st.write(f"Predicted Winner: {st.session_state.predicted_winner}")
 

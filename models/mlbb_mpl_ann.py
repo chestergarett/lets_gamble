@@ -41,7 +41,7 @@ class TransformerWinner(nn.Module):
         self.embedding = nn.Linear(input_size, d_model)
         
         # Transformer encoder layer
-        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=num_heads, dim_feedforward=dim_feedforward, dropout=dropout)
+        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=num_heads, dim_feedforward=dim_feedforward, dropout=dropout,batch_first=True)
         self.transformer_encoder = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
         
         # Fully connected output layer
@@ -56,9 +56,10 @@ class TransformerWinner(nn.Module):
     def forward(self, x):
         # Input embedding
         x = self.embedding(x).unsqueeze(0)
+        x = x.permute(1, 0, 2)
         # Transformer encoder
         x = self.transformer_encoder(x)
-        x = x.mean(dim=0)  # Average over sequence length
+        x = x.mean(dim=1)  # Average over sequence length
         
         # Fully connected output
         x = self.fc_out(x)
@@ -131,7 +132,8 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, country, ep
         if (epoch + 1) % 10 == 0:
             print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item():.4f}')
 
-    torch.save(model.state_dict(), f'pickles/mpl/{country}/mlbb_model_transformer.pth')
+    with open(f'pickles/mpl/{country}/mlbb_model_transformer.pkl', 'wb') as f:
+        pickle.dump(model.state_dict(), f)
 
     # Evaluation
     model.eval()
@@ -140,7 +142,6 @@ def train_winner_model_transformer(X_train, X_test, y_train, y_test, country, ep
         predicted = (outputs >= 0.5).float()  # Convert probabilities to binary predictions
     
     accuracy = accuracy_score(y_test_tensor, predicted)
-    print('predicted', predicted)
     print(f'Accuracy for winning team: {accuracy:.4f}')
     
     return model
@@ -176,6 +177,7 @@ def load_inference_artifacts_ann(filepath):
 
 def predict_winner(trained_model_config,label_encoder,scaler, df):
     # df['year'] = label_encoder.transform(df['year'])
+    
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
     # numeric_cols = numeric_cols.drop(['year'])
     df[numeric_cols] = scaler.transform(df[numeric_cols])
@@ -184,6 +186,7 @@ def predict_winner(trained_model_config,label_encoder,scaler, df):
     model = TransformerWinner(features.shape[1])
     model.load_state_dict(torch.load(trained_model_config))
     model.eval()
+
     with torch.no_grad():
         predictions = model(features).numpy()
     predictions = (predictions > 0.5).astype(int).flatten()
@@ -196,11 +199,12 @@ def predict_winner(trained_model_config,label_encoder,scaler, df):
         }
         results.append(prediction_result)
     
+    print('results',results)
     return results
 
 def run_sample_inference(inference_file_path, df):
-    trained_model,label_encoder,scaler = load_inference_artifacts_ann(inference_file_path)
-    prediction = predict_winner(trained_model,label_encoder,scaler, df)
+    trained_model_config,label_encoder,scaler = load_inference_artifacts_ann(inference_file_path)
+    prediction = predict_winner(trained_model_config,label_encoder,scaler, df)
     print(prediction)
 
 #### pipeline ###
