@@ -1,6 +1,7 @@
 # Holy Grail of Sports Betting
 - Authored by: Chester Garett Calingacion
 - Page last updated on: Aug 4, 2024
+- For more details, visit the deployed app @ https://letsgamble.streamlit.app/
 
 ## Introduction
 In traditional financial markets, retail investors face significant challenges: 1) identifying optimal times to BUY, HOLD, and SELL, 2) competing against market whales, and 3) managing biases caused by human emotions. For sports betting, although human emotions still heavily influence decisions - the time variability is negligible and market whales are fewer. This system exploits these factors. To date, the devised system has generated a profit of 10.54% from 154 bets.
@@ -39,8 +40,6 @@ The best bet performance is observed in MLBB, attributed to the author's in-dept
 
 ## Conclusion
 The findings indicate consistent profitability in the system. This research underscores the importance of strategic betting against public sentiment and the value of game-specific knowledge and simulation models in maximizing betting profits.
-
-For more details, visit the deployed app @ https://letsgamble.streamlit.app/
 
 ## Appendix
 
