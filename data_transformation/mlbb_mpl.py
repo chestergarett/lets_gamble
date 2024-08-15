@@ -73,6 +73,7 @@ def run_transformation_pipeline(csv,country):
     df = pd.read_csv(f'files/mlbb/MPL/{country}/model_usage/mpl_input_model_data.csv')
     do_feature_engineering(df,country)
 
-country = 'Indonesia'
-csv = f'files/mlbb/MPL/{country}/all_seasons.csv'
-run_transformation_pipeline(csv,country)
+if __name__=='__main__':
+    country = 'Philippines'
+    csv = f'files/mlbb/MPL/{country}/all_seasons.csv'
+    run_transformation_pipeline(csv,country)

@@ -106,6 +106,13 @@ def add_predicted_winners_to_db(transaction):
 
     print('Transactions uploaded to Firestore')
 
+def add_predicted_winners_to_db_dynamic(transaction,collection_name):
+    db = firestore.client()
+    predicted_winners_collection = db.collection(collection_name)
+    predicted_winners_collection.document().set(transaction)
+
+    print('Transactions uploaded to Firestore')
+
 def add_matches_to_db(transactions):
     db = firestore.client()
     match_odds_collection = db.collection('match-odds-log')

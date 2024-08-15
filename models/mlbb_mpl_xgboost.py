@@ -104,19 +104,21 @@ def run_sample_inference(inference_file_path, df):
 
 
 #### pipeline ###
-start_train_model = False
-test_inference = False
 
-if start_train_model:
-    country = 'Indonesia'
-    training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-    run_training_pipeline(training_file_folder,country)
+if __name__=='__main__':
+    start_train_model = False
+    test_inference = True
 
-if test_inference:
-    country = 'Indonesia'
-    inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-    sample_df = run_sampling_for_inference(inference_file_folder)
-    inference_file_path = f'pickles/mpl/{country}'
-    prediction = run_sample_inference(inference_file_path, sample_df)
-    print(prediction)
+    if start_train_model:
+        country = 'Philippines'
+        training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+        run_training_pipeline(training_file_folder,country)
+
+    if test_inference:
+        country = 'Philippines'
+        inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+        sample_df = run_sampling_for_inference(inference_file_folder)
+        inference_file_path = f'pickles/mpl/{country}'
+        prediction = run_sample_inference(inference_file_path, sample_df)
+        print(prediction)
 

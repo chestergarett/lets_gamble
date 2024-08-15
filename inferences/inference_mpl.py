@@ -1,12 +1,14 @@
 import os
 import sys
 import torch
+import copy
 import torch.nn as nn
 import torch.optim as optim
 import pandas as pd
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from models.mlbb_mpl_xgboost import predict as predict_xgboost, load_inference_artifacts as load_inference_artifacts_xgboost
 from models.mlbb_mpl_ann import load_inference_artifacts_ann as load_inference_artifacts_transformers
+from firebase.connect import establish_connection, add_predicted_winners_to_db_dynamic
 
 class TransformerWinner(nn.Module):
     def __init__(self, input_size, d_model=128, num_heads=4, num_layers=2, dim_feedforward=512, dropout=0.3):
@@ -104,19 +106,33 @@ def do_transformers_prediction(data,country):
 
 country = 'Indonesia'
 data = {
-        "team1": 'Rebellion',
-        "team2": 'Geek Fam',
-        "team1_match_wins": 6,
-        "team1_match_losses": 9,
-        "team1_game_wins": 16,
-        "team1_game_losses": 14,
-        "team2_match_wins": 9,
-        "team2_match_losses": 6,
-        "team2_game_wins": 20,
-        "team2_game_losses": 8,
+        "team1": 'Bigetron Alpha',
+        "team2": 'Alter Ego',
+        "team1_match_wins": 2,
+        "team1_match_losses": 0,
+        "team1_game_wins": 4,
+        "team1_game_losses": 1,
+        "team2_match_wins": 1,
+        "team2_match_losses": 0,
+        "team2_game_wins": 2,
+        "team2_game_losses": 1,
         "year": 2024
 }
 
-# prediction = do_xgboost_prediction(data, country)
-prediction = do_transformers_prediction(data, country)
-print(prediction)
+def predict_from_both_models(country,data):
+    collection = 'mpl-groups-model-hypothesis'
+    establish_connection()
+    xgboost_prediction = do_xgboost_prediction(data, country)
+    xgboost_data = copy.deepcopy(data)
+    xgboost_data['model'] = xgboost_prediction[0]
+    xgboost_data['predicted_winner'] = xgboost_prediction[1]
+    transfomers_prediction = do_transformers_prediction(data, country)
+    transformers_data = copy.deepcopy(data)
+    transformers_data['model'] = transfomers_prediction[0]
+    transformers_data['predicted_winner'] = transfomers_prediction[1]
+    add_predicted_winners_to_db_dynamic(transformers_data, collection)
+    add_predicted_winners_to_db_dynamic(xgboost_data, collection)
+    print(xgboost_prediction,transfomers_prediction)
+
+if __name__=='__main__':
+    predict_from_both_models(country,data)

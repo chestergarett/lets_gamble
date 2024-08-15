@@ -207,18 +207,19 @@ def run_sample_inference(inference_file_path, df):
     prediction = predict_winner(trained_model_config,label_encoder,scaler, df)
     print(prediction)
 
-#### pipeline ###
-start_train_model = False
-test_inference = False
+if __name__=='__main__':
+    #### pipeline ###
+    start_train_model = False
+    test_inference = True
 
-if start_train_model:
-    country = 'Indonesia'
-    training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-    run_training_pipeline(training_file_folder,country)
+    if start_train_model:
+        country = 'Philippines'
+        training_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+        run_training_pipeline(training_file_folder,country)
 
-if test_inference:
-    country = 'Indonesia'
-    inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
-    sample_df = run_sampling_for_inference(inference_file_folder)
-    inference_file_path = f'pickles/mpl/{country}'
-    run_sample_inference(inference_file_path, sample_df)
+    if test_inference:
+        country = 'Philippines'
+        inference_file_folder = f'files/mlbb/MPL/{country}/model_usage'
+        sample_df = run_sampling_for_inference(inference_file_folder)
+        inference_file_path = f'pickles/mpl/{country}'
+        run_sample_inference(inference_file_path, sample_df)
