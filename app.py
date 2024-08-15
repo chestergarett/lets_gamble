@@ -7,7 +7,7 @@ pages = {
     "Match Odds History": match_odds_logs,
     "Risk Calculator": risk_calculator,
     "Record Bets": record_bets,
-    "MLBB International A/B Tests": mlbb_model_ab_test,
+    "MLBB Model A/B Tests": mlbb_model_ab_test,
     "MLBB International Predict Winner": mlbb_predict_winner,
     "MLBB International Stats": mlbb_msc_stats,
     # "MLBB Local Predict Winner": mlbb_predict_winner_mpl

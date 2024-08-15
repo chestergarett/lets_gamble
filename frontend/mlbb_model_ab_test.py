@@ -10,16 +10,22 @@ load_dotenv()
 AUTHENTICATION_KEY = os.environ.get('AUTHENTICATION_KEY')
 
 def app():
-    pred_df = load_offline_df('model_prediction_logs')
+    tournament = st.selectbox("Select Tournament", ['International', 'Local'])
+    
+    if tournament == 'International':
+        pred_df = load_offline_df('model_prediction_logs')
+    else:
+        pred_df = load_offline_df('model_mpl_prediction_logs')
+    
     pred_df = pred_df.reset_index()
     ordered_columns = ['model', 'team1', 'team2', 'predicted_winner', 'actual_winner', 'tournament']
+    ordered_columns = [col for col in ordered_columns if col in pred_df.columns]
     pred_df = pred_df[ordered_columns]
     pred_df['correct'] = pred_df['predicted_winner'] == pred_df['actual_winner']
     accuracy_df = pred_df.groupby('model')['correct'].mean().reset_index()
     accuracy_df.columns = ['model', 'accuracy']
-    print(accuracy_df[accuracy_df['model']=='XgBoost']['accuracy'])
-    xg_boost_accuracy = accuracy_df[accuracy_df['model']=='XgBoost']['accuracy'].values[0]
-    ann_accuracy = accuracy_df[accuracy_df['model']=='ANN']['accuracy'].values[0]
+    xg_boost_accuracy = accuracy_df[accuracy_df['model'].isin(['XgBoost', 'XGBoost'])]['accuracy'].values[0]
+    ann_accuracy = accuracy_df[accuracy_df['model'].isin(['ANN','Transformers'])]['accuracy'].values[0]
     st.title("Model Performance")
     
     col1, col2 = st.columns(2)

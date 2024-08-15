@@ -126,10 +126,12 @@ def predict_from_both_models(country,data):
     xgboost_data = copy.deepcopy(data)
     xgboost_data['model'] = xgboost_prediction[0]
     xgboost_data['predicted_winner'] = xgboost_prediction[1]
+    xgboost_data['actual_winner'] = ''
     transfomers_prediction = do_transformers_prediction(data, country)
     transformers_data = copy.deepcopy(data)
     transformers_data['model'] = transfomers_prediction[0]
     transformers_data['predicted_winner'] = transfomers_prediction[1]
+    transformers_data['actual_winner'] = ''
     add_predicted_winners_to_db_dynamic(transformers_data, collection)
     add_predicted_winners_to_db_dynamic(xgboost_data, collection)
     print(xgboost_prediction,transfomers_prediction)

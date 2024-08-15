@@ -41,6 +41,20 @@ def get_model_prediction_logs():
     pred_df.set_index('id', inplace=True)
     return pred_df
 
+def get_collection_logs(collection_name):
+    db = firestore.client()
+    collection = db.collection(collection_name)
+    docs = collection.stream()
+    doc_array = []
+    for doc in docs:
+        doc_dict = doc.to_dict()
+        doc_dict['id'] = doc.id
+        doc_array.append(doc_dict)
+
+    pred_df = pd.DataFrame(doc_array)
+    pred_df.set_index('id', inplace=True)
+    return pred_df
+
 def get_match_odds_logs():
     db = firestore.client()
     odds_collection = db.collection('match-odds-log')
@@ -188,6 +202,9 @@ def run_firebase_pipeline(data_type):
     if data_type=='model_prediction_logs':
         pred_df = get_model_prediction_logs()
         return pred_df
+    if data_type=='model_mpl_prediction_logs':
+        df = get_collection_logs('mpl-groups-model-hypothesis')
+        return df
     
     return 'Unknown document collection'
 

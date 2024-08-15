@@ -1,6 +1,6 @@
 id,year,team2_group_rank,model,team2,team1_country,predicted_winner,team2_group_loss,tournament,team1_group_loss,team1_group_win,team2_group_win,team1,team2_country,team1_group_rank,actual_winner
 0FRE73FPeRFpW6mbRYEs,2024,2,XgBoost,Fire Flux Esports,Malaysia,Selangor Red Giants,2,MSC,1,5,4,Selangor Red Giants,Turkey,1,Selangor Red Giants
-5Pss2V2vTCXoTZUtheQC,2024,1,ANN,Liquid Echo,CIS,Liquid Echo,1,Other,0,4,4,Team Spirit,Philippines,1,
+5Pss2V2vTCXoTZUtheQC,2024,1,ANN,Liquid Echo,CIS,Liquid Echo,1,Other,0,4,4,Team Spirit,Philippines,1,Liquid Echo
 6vcQSYNGP2kNik8K8Rzr,2024,2,ANN,Fire Flux Esports,Malaysia,Selangor Red Giants,2,MSC,1,5,4,Selangor Red Giants,Turkey,1,Selangor Red Giants
 7OD52YvHHZvxpK87p9qb,2024,1,XgBoost,NIP Flash,Malaysia,HomeBois,1,MSC,2,4,5,HomeBois,Singapore,2,NIP Flash
 89eNLDWCXCTaJI3F8ITQ,2024,2,XgBoost,MadBulls,CIS,Team Spirit,3,Other,0,4,2,Team Spirit,Russia,1,Team Spirit
@@ -23,7 +23,7 @@ h7zqHWJ8rl59U1TuJBBb,2024,2,ANN,AP. Bren,Philippines,Liquid Echo,3,Other,1,4,2,L
 idQRLoM7odwq5BPUJiBr,2024,2,XgBoost,AP. Bren,Philippines,Liquid Echo,3,Other,1,4,2,Liquid Echo,Philippines,1,Liquid Echo
 jJvCDwOCkPsfgQxwsv6l,2024,2,XgBoost,Falcons AP.Bren,Indonesia,Falcons AP.Bren,3,Other,5,7,8,Fnatic Onic,Philippines,3,Falcons AP.Bren
 mGuDD8Tpye6IgmX263D3,2024,1,ANN,SRG,Philippines,Liquid Echo,2,Other,3,10,10,Liquid Echo,Malaysia,1,Liquid Echo
-o0LYYLi9uHbU41oy6eoR,2024,1,XgBoost,Liquid Echo,CIS,Team Spirit,1,Other,0,4,4,Team Spirit,Philippines,1,
+o0LYYLi9uHbU41oy6eoR,2024,1,XgBoost,Liquid Echo,CIS,Team Spirit,1,Other,0,4,4,Team Spirit,Philippines,1,Liquid Echo
 oHxQbHgrn34jtwP9s2zn,2024,2,ANN,Falcon Esports,Philippines,Liquid Echo,2,MSC,0,6,4,Liquid Echo,Myanmar,1,Liquid Echo
 q81xCSDUmdvlHs15R7F3,2024,1,ANN,NIP Flash,Malaysia,Selangor Red Giants,1,MSC,1,5,5,Selangor Red Giants,Singapore,1,Selangor Red Giants
 tsKNq8bvELu9NgDXegER,2024,1,ANN,Falcons AP Bren,Malaysia,Falcons AP Bren,0,MSC,1,5,6,Selangor Red Giants,Philippines,1,Selangor Red Giants

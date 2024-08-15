@@ -9,10 +9,11 @@ def save_offline_firebase_logs():
     bet_df = run_firebase_pipeline('bet_logs')
     match_odds_df = run_firebase_pipeline('match_logs')
     pred_df = run_firebase_pipeline('model_prediction_logs')
-    
+    pred_mpl_df = run_firebase_pipeline('model_mpl_prediction_logs')
     bet_df.to_csv(f'{filepath}/bet_df.csv')
     match_odds_df.to_csv(f'{filepath}/match_odds_df.csv')
     pred_df.to_csv(f'{filepath}/pred_df.csv')
+    pred_mpl_df.to_csv(f'{filepath}/pred_mpl_df.csv')
 
 def load_offline_df(data_type):
     filepath = r'files/offline_logs'
@@ -25,9 +26,9 @@ def load_offline_df(data_type):
     if data_type=='match_logs':
         match_odds_df = pd.read_csv(f'{filepath}/match_odds_df.csv').set_index('id')
         return match_odds_df
-    
+    if data_type=='model_mpl_prediction_logs':
+        pred_mpl_df = pd.read_csv(f'{filepath}/pred_mpl_df.csv').set_index('id')
+        return pred_mpl_df
 
-save_online_data = False
-
-if save_online_data:
+if __name__=='__main__':
     save_offline_firebase_logs()
