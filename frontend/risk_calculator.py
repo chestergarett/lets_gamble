@@ -40,5 +40,10 @@ def app():
             'Value': [min_value, median_value, max_value]
         }
         df = pd.DataFrame(data)
+        possibilities_df = pd.DataFrame(possibilities,columns=['All Scenarios'])
+        possibilities_df.sort_values(['All Scenarios'])
         st.write(f"If you allocate {allocation_per_game[0]} per game, you have a chance to gain/lose the ff:")
         st.table(df)
+        st.write('All scenarios:')
+        st.table(possibilities_df)
+

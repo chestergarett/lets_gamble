@@ -105,20 +105,22 @@ def run_sampling_for_inference(inference_file_folder):
 ### inference for predicting results
 def run_sample_inference(inference_file_path, df):
     trained_model,label_encoder,scaler,explainer = load_inference_artifacts(inference_file_path)
-    predict(trained_model,label_encoder,scaler,explainer, df)
+    prediction = predict(trained_model,label_encoder,scaler,explainer, df)
+    print(prediction)
 
 
-#### pipeline ###
-start_train_model = False
-test_inference = False
+if __name__=='__main__':
+    #### pipeline ###
+    start_train_model = False
+    test_inference = True
 
-if start_train_model:
-    training_file_folder = r'files/mlbb/MSC/model_usage'
-    run_training_pipeline(training_file_folder)
+    if start_train_model:
+        training_file_folder = r'files/mlbb/MSC/model_usage'
+        run_training_pipeline(training_file_folder)
 
-if test_inference:
-    inference_file_folder = r'files/mlbb/MSC/model_usage'
-    sample_df = run_sampling_for_inference(inference_file_folder)
-    inference_file_path = r'pickles/'
-    run_sample_inference(inference_file_path, sample_df)
+    if test_inference:
+        inference_file_folder = r'files/mlbb/MSC/model_usage'
+        sample_df = run_sampling_for_inference(inference_file_folder)
+        inference_file_path = r'pickles/'
+        run_sample_inference(inference_file_path, sample_df)
 

@@ -94,12 +94,13 @@ def load_inference_artifacts_ann(filepath):
     
     return trained_model,label_encoder,scaler,explainer
 
-def predict_ann(trained_model, trained_model_state_dict,label_encoder,scaler,explainer, df):
+def predict_ann(trained_model_state_dict,label_encoder,scaler,explainer, df):
     df['year'] = label_encoder.fit_transform(df['year'])
     numeric_cols = df.select_dtypes(include=['float64', 'int64']).columns
     df[numeric_cols] = scaler.transform(df[numeric_cols])
     features = torch.tensor(df.values, dtype=torch.float32)
     
+    trained_model = ANNModel(features.shape[1])
     trained_model.load_state_dict(trained_model_state_dict)
     trained_model.eval()
     with torch.no_grad():
@@ -128,8 +129,9 @@ def run_sampling_for_inference(inference_file_folder):
     return sample_df
 
 def run_sample_inference(inference_file_path, df):
-    trained_model,label_encoder,scaler,explainer = load_inference_artifacts_ann(inference_file_path)
-    predict_ann(trained_model,label_encoder,scaler,explainer, df)
+    trained_model_state_dict,label_encoder,scaler,explainer = load_inference_artifacts_ann(inference_file_path)
+    prediction = predict_ann(trained_model_state_dict,label_encoder,scaler,explainer, df)
+    print(prediction)
 
 def run_training_pipeline(training_file_folder):
     X_train = pd.read_csv(f'{training_file_folder}/X_train.csv')
@@ -140,15 +142,16 @@ def run_training_pipeline(training_file_folder):
     train_model_ann(X_train,X_test, y_train, y_test)
 
 #### pipeline ###
-start_train_model = False
-test_inference = False
+if __name__=='__main__':
+    start_train_model = False
+    test_inference = True
 
-if start_train_model:
-    training_file_folder = r'files/mlbb/MSC/model_usage'
-    run_training_pipeline(training_file_folder)
+    if start_train_model:
+        training_file_folder = r'files/mlbb/MSC/model_usage'
+        run_training_pipeline(training_file_folder)
 
-if test_inference:
-    inference_file_folder = r'files/mlbb/MSC/model_usage'
-    sample_df = run_sampling_for_inference(inference_file_folder)
-    inference_file_path = r'pickles/'
-    run_sample_inference(inference_file_path, sample_df)
+    if test_inference:
+        inference_file_folder = r'files/mlbb/MSC/model_usage'
+        sample_df = run_sampling_for_inference(inference_file_folder)
+        inference_file_path = r'pickles/'
+        run_sample_inference(inference_file_path, sample_df)

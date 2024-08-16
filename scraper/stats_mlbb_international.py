@@ -146,14 +146,22 @@ def get_country_head_to_head(csv):
     grouped_df = df.groupby(['Year','winner_country', 'loser_country']).size().reset_index()
     grouped_df.to_csv(r'files/mlbb/MSC/aggregates/country_matchup.csv')
 
-### scrape per year MSC results
-years = [2024]
-loop_per_year_then_scrape(years)
+if __name__=='__main__':
+    will_scrape = False
+    will_concat = True
+    will_head = True
+    
+    ### scrape per year MSC results
+    if will_scrape:
+        years = [2024]
+        loop_per_year_then_scrape(years)
 
-#### contenate per year stats into one dataframe
-folder_path = r'files/mlbb/MSC/'
-concatenate_dfs(folder_path)
+    #### contenate per year stats into one dataframe
+    if will_concat:
+        folder_path = r'files/mlbb/MSC/'
+        concatenate_dfs(folder_path)
 
-### country head to head matchups
-concatenated_csv = r'files/mlbb/MSC/all_years.csv'
-get_country_head_to_head(concatenated_csv)
+    ### country head to head matchups
+    if will_head:
+        concatenated_csv = r'files/mlbb/MSC/all_years.csv'
+        get_country_head_to_head(concatenated_csv)
