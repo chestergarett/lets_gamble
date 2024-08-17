@@ -31,6 +31,7 @@ id,odds,win_loss_amount,bet_with,bet_amount,bet_against,bet_date,game,win_loss_c
 6DYKjx2zidPvsAafUoqG,2.05,-200.0,NIP Flash,200.0,HomeBois,2024-07-28,mlbb,LOSS,snapdragon_pro_series
 70lZp3QDYgXJfatItqzT,2.04,173.4,Oh my God Academy,85.0,WE Academy,2024-07-27,lol,WIN,ldl
 7S4xwE2bfiAVKjvTYiLg,3.12,-25.0,TSM,25.0,M80,2024-07-23,valorant,LOSS,challengers_north_america
+7SufWYqinkzsUBka7QPO,3.34,-85.0,Alter Ego,85.0,Bigetron Alpha,2024-08-17,mlbb,LOSS,mpl_id
 8JVdPXOYB0CNXxsZmSPp,2.01,170.85,UU Gamers,85.0,BOA,2024-07-22,hok,WIN,king_growth_league
 8PRzDz7eAU1ScwK7M6ZO,1.22,347.7,Falcons AP.Bren,285.0,Team Spirit,2024-08-10,mlbb,WIN,1xb_supernova
 8qNBYpc9WJXvyf2VXO4b,2.11,52.75,MOUZ,25.0,nouns,2024-07-26,dota2,WIN,elite_league
@@ -52,6 +53,7 @@ E9oo4zYlWbe5HzzKSfZl,2.77,-85.0,Dragon Ranger,85.0,KuaiShow,2024-07-19,hok,LOSS,
 EgKjkCPfWsR56vv0phPC,4.45,-25.0,trashcan,25.0,GONext,2024-07-26,valorant,LOSS,challengers_east
 FIRmoO2m9PGzdlwjJrcw,1.2,-85.0,Falcons AP.Bren,85.0,SRG,2024-07-14,mlbb,LOSS,msc
 FtDCK2MhA4NS3DS9iyyD,3.25,276.25,Victorious,85.0,The Young,2024-07-13,hok,WIN,king_growth_league
+Fzh6kWNxFI1UwPUYnaxY,2.71,-85.0,RSG Philippines,85.0,Liquid PH,2024-08-17,mlbb,LOSS,mpl_ph
 G02vN9W36ITRliQhsbed,2.2,-85.0,Draw,85.0,Falcon&Xianyou,2024-07-07,mlbb,LOSS,msc
 G0QEGqthBkazfKFlnaXS,2.46,-85.0,Nongshim Redforce,85.0,FearX,2024-07-24,lol,LOSS,lck
 GUM1JTxLkpqv8TvMAqwd,2.69,-85.0,eStar Pro,85.0,KuaiShow,2024-07-12,hok,LOSS,king_pro_league
@@ -59,7 +61,9 @@ H2NjGKBjkG5qaGr1DfGR,1.24,105.4,Fnatic Onic,85.0,Omega,2024-07-30,mlbb,WIN,snapd
 HR6m49U5Q6ucHOqeZZEr,2.01,-85.0,The Young Ranger,85.0,Xianyou,2024-07-20,hok,LOSS,king_growth_league
 HlGwVmmMi4sdUMpCBc4G,2.56,64.0,G2,25.0,Sentinels,2024-07-15,valorant,WIN,champions_tour_americas
 HmXdFD2xv6Hhg0TbCWOP,2.07,51.75,Fnatic,25.0,SK Gaming,2024-07-14,lol,WIN,lec
+IFcfxWTIelp5I0JG0h6M,5.52,469.2,Omega,85.0,Falcons AP.Bren,2024-08-17,mlbb,WIN,mpl_ph
 ISXqht6pb7mZskpEF6wv,3.67,-25.0,Aurora,25.0,Falcons AP.Bren,2024-08-09,mlbb,LOSS,1xb_supernova
+IWHME0Cz7cReKVIr6tqw,2.97,-85.0,TNC Pro,85.0,Fnatic Onic,2024-08-17,mlbb,LOSS,mpl_ph
 IXQjgJaLgvReRrgX3duJ,2.22,-25.0,Brute Force,25,HomeBois,2024-06-29,mlbb,LOSS,msc
 J5gUT6hGXPyggo12Cok5,1.53,130.05,RRQ Hoshi,85.0,Rebellion,2024-08-16,mlbb,WIN,mpl_id
 JLE1sPyUo54lJfssZQJe,7.22,-25.0,HomeBois,25.0,Fnatic Onic,2024-08-01,mlbb,LOSS,snapdragon_pro_series
@@ -137,6 +141,7 @@ jmwyQs1YHuWwR023VAIp,2.01,50.25,JustUS,25.0,Avernus,2024-07-17,valorant,WIN,chal
 jzIrtHOzafpipTmRSmEW,2.0,-25.0,Dplus,25.0,Sin Prisa,2024-07-18,valorant,LOSS,challengers_korea
 kxFWmaVHqkphGdGqxG4j,2.73,-25.0,Shopify Rebellion,25.0,OG,2024-07-28,dota2,LOSS,elite_league
 lfqPnf3lF9gylC7Eu9lQ,2.69,-25.0,Liquid ID,25.0,Fnatic Onic,2024-08-09,mlbb,LOSS,mpl_id
+lrTGY1BaEtUBIzMgoF1n,1.84,156.4,Geek Fam,85.0,Evos Glory,2024-08-17,mlbb,WIN,mpl_id
 m3LPydpfWvi2LRNxDhmw,2.01,170.85,EDward Gaming,85.0,Ultra Prime,2024-07-27,lol,WIN,lpl
 mTGGYYm5N4csZC26O4Zp,2.28,-25.0,S2G,25,KeepBest,2024-06-28,mlbb,LOSS,msc
 mxrSNeE5EtDeq5tNsOw6,3.73,93.25,Galorys,25.0,Red Canids,2024-07-16,valorant,WIN,challengers_brazil
@@ -170,6 +175,7 @@ urNzqBRk4s1ZaWrr6zRO,3.38,84.5,Rapid Lofi,25.0,Flash,2024-07-17,valorant,WIN,cha
 urWdERnVpnx87rO5RLXJ,3.48,87.0,KaBuM Academy,25.0,Vivo Keyd Stars Academy,2024-07-24,lol,WIN,cblol_academy
 vRWNFiH2yx4QTnMOENW9,3.24,81.0,Omega Empress,25.0,Vitality,2024-07-27,mlbb,WIN,mwi
 vpTmhbXrDTfSVMLdaZJ9,2.04,173.4,HomeBois,85.0,Twisted Minds,2024-07-05,mlbb,WIN,msc
+wGVzR42AI4iyVSajk8FG,1.36,-85.0,Fnatic Onic,85.0,RRQ Hoshi,2024-08-17,mlbb,LOSS,mpl_id
 wmtWFoeYj74KeEUwtVny,2.05,52.25,GIANTX,25.0,Heretics,2024-07-21,lol,WIN,lec
 yOcFVpqloCYqoVRNOSCT,2.83,70.75,Trained to Kill,25,IHC,2024-06-29,mlbb,WIN,msc
 ye1iXP5jrOQsoYp2CCbl,2.17,-85.0,Titan King's Legion,85.0,Hero JiuJing,2024-07-21,hok,LOSS,king_pro_league

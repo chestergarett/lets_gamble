@@ -104,18 +104,18 @@ def do_transformers_prediction(data,country):
     predicted_winner = data['team1'] if prediction[0]['prediction']==1 else data['team2']
     return 'Transformers', predicted_winner 
 
-country = 'Philippines'
+country = 'Indonesia'
 data = {
-        "team1": 'TNC Pro',
-        "team2": 'Omega',
-        "team1_match_wins": 0,
-        "team1_match_losses": 0,
-        "team1_game_wins": 0,
-        "team1_game_losses": 0,
+        "team1": 'Liquid ID',
+        "team2": 'Rebellion',
+        "team1_match_wins": 1,
+        "team1_match_losses": 2,
+        "team1_game_wins": 2,
+        "team1_game_losses": 5,
         "team2_match_wins": 0,
-        "team2_match_losses": 0,
-        "team2_game_wins": 0,
-        "team2_game_losses": 0,
+        "team2_match_losses": 2,
+        "team2_game_wins": 1,
+        "team2_game_losses": 4,
         "year": 2024
 }
 
@@ -132,8 +132,8 @@ def predict_from_both_models(country,data):
     transformers_data['model'] = transfomers_prediction[0]
     transformers_data['predicted_winner'] = transfomers_prediction[1]
     transformers_data['actual_winner'] = ''
-    # add_predicted_winners_to_db_dynamic(transformers_data, collection)
-    # add_predicted_winners_to_db_dynamic(xgboost_data, collection)
+    add_predicted_winners_to_db_dynamic(transformers_data, collection)
+    add_predicted_winners_to_db_dynamic(xgboost_data, collection)
     print(xgboost_prediction,transfomers_prediction)
 
 if __name__=='__main__':
